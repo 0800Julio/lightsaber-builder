@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
+
 interface PartPanelProps {
   label: string; // Ej: "CUELLO"
   short: string; // Ej: "N"
@@ -18,20 +19,19 @@ export default function PartPanel({ label, short, type, imagePath, options, onCh
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedFinish, setSelectedFinish] = useState<string | null>(null);
 
-  const getImagePath = () => {
-    if (selectedType && selectedColor) {
-      let path = `/images/${type}/${selectedType}/${selectedColor}`;
-      if (selectedFinish) path += `-${selectedFinish}`;
-      return `${path}.jpg`;
-    }
-    return `/images/${type}/standard.jpg`;
-  };
-
   // Llamamos a onChange cada vez que cambian las selecciones
   useEffect(() => {
-    onChange(getImagePath());
-  }, [selectedType, selectedColor, selectedFinish]);
-
+    const path = (() => {
+      if (selectedType && selectedColor) {
+        let p = `/images/${type}/${selectedType}/${selectedColor}`;
+        if (selectedFinish) p += `-${selectedFinish}`;
+        return `${p}.jpg`;
+      }
+      return `/images/${type}/standard.jpg`;
+    })();
+  
+    onChange(path);
+  }, [selectedType, selectedColor, type, selectedFinish, onChange]);
   const handleTypeChange = (val: string) => {
     setSelectedType(val);
     setSelectedColor(null);

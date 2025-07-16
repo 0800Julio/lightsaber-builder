@@ -30,10 +30,7 @@ export default function PartSelector({ partName, partKey, options, onChange }: P
     setSelectedFinish(null);
   };
 
-  const handleColorChange = (color: string) => {
-    setSelectedColor(color);
-    setSelectedFinish(null);
-  };
+
 
   const handleFinishChange = (finish: string) => {
     setSelectedFinish(finish);
@@ -75,24 +72,7 @@ export default function PartSelector({ partName, partKey, options, onChange }: P
         </select>
       </div>
 
-      {/* Color */}
-      {selectedType && (
-        <div className="mb-2">
-          <label className="block mb-1 font-semibold">Color:</label>
-          <select
-            className="w-full p-1 bg-gray-800 text-white"
-            value={selectedColor ?? ''}
-            onChange={(e) => handleColorChange(e.target.value)}
-          >
-            <option value="">Seleccionar color</option>
-            {Object.keys(options[selectedType]).map((color) => (
-              <option key={color} value={color}>
-                {color.replace(/-/g, ' ')}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
+      {/* Colores como cuadraditos */}
 
       {/* Acabado */}
       {selectedType && selectedColor && options[selectedType][selectedColor].length > 0 && (
@@ -115,3 +95,5 @@ export default function PartSelector({ partName, partKey, options, onChange }: P
     </div>
   );
 }
+
+
