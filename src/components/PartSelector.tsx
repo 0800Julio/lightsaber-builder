@@ -75,24 +75,22 @@ export default function PartSelector({ partName, partKey, options, onChange }: P
         </select>
       </div>
 
-      {/* Color */}
-      {selectedType && (
-        <div className="mb-2">
-          <label className="block mb-1 font-semibold">Color:</label>
-          <select
-            className="w-full p-1 bg-gray-800 text-white"
-            value={selectedColor ?? ''}
-            onChange={(e) => handleColorChange(e.target.value)}
-          >
-            <option value="">Seleccionar color</option>
-            {Object.keys(options[selectedType]).map((color) => (
-              <option key={color} value={color}>
-                {color.replace(/-/g, ' ')}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
+      {/* Colores como cuadraditos */}
+{selectedType && (
+  <div className="flex gap-2 flex-wrap mt-2">
+    {Object.keys(options[selectedType]).map((color) => (
+      <div
+        key={color}
+        className={`w-8 h-8 rounded cursor-pointer border-2 ${
+          selectedColor === color ? 'border-white' : 'border-gray-600'
+        }`}
+        style={{ backgroundColor: parseColor(color) }}
+        title={color}
+        onClick={() => handleColorChange(color)}
+      />
+    ))}
+  </div>
+)}
 
       {/* Acabado */}
       {selectedType && selectedColor && options[selectedType][selectedColor].length > 0 && (
@@ -115,3 +113,7 @@ export default function PartSelector({ partName, partKey, options, onChange }: P
     </div>
   );
 }
+function parseColor(color: string): import("csstype").Property.BackgroundColor | undefined {
+  throw new Error('Function not implemented.');
+}
+

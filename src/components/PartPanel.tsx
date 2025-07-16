@@ -3,6 +3,19 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
+// Traduce nombres a colores CSS válidos
+const parseColor = (name: string): string => {
+  const colorMap: Record<string, string> = {
+    negro: '#111',
+    gris: '#888',
+    rojo: '#d00',
+    azul: '#007bff',
+    amarillo: '#ffc107',
+    // Por defecto, lo devolvemos tal cual por si es un color CSS válido
+  };
+  return colorMap[name.toLowerCase()] || name;
+};
+
 interface PartPanelProps {
   label: string; // Ej: "CUELLO"
   short: string; // Ej: "N"
