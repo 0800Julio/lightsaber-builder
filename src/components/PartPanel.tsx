@@ -19,15 +19,6 @@ export default function PartPanel({ label, short, type, imagePath, options, onCh
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedFinish, setSelectedFinish] = useState<string | null>(null);
 
-  const getImagePath = () => {
-    if (selectedType && selectedColor) {
-      let path = `/images/${type}/${selectedType}/${selectedColor}`;
-      if (selectedFinish) path += `-${selectedFinish}`;
-      return `${path}.jpg`;
-    }
-    return `/images/${type}/standard.jpg`;
-  };
-
   // Llamamos a onChange cada vez que cambian las selecciones
   useEffect(() => {
     const path = (() => {
@@ -40,7 +31,7 @@ export default function PartPanel({ label, short, type, imagePath, options, onCh
     })();
   
     onChange(path);
-  }, [selectedType, selectedColor, selectedFinish, type, selectedFinish, onChange]);
+  }, [selectedType, selectedColor, type, selectedFinish, onChange]);
   const handleTypeChange = (val: string) => {
     setSelectedType(val);
     setSelectedColor(null);
