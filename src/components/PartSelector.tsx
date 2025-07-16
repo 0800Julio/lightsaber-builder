@@ -30,10 +30,7 @@ export default function PartSelector({ partName, partKey, options, onChange }: P
     setSelectedFinish(null);
   };
 
-  const handleColorChange = (color: string) => {
-    setSelectedColor(color);
-    setSelectedFinish(null);
-  };
+
 
   const handleFinishChange = (finish: string) => {
     setSelectedFinish(finish);
