@@ -17,10 +17,17 @@ export default function PartSelector({ partName, partKey, options, onChange }: P
 
   const getImagePath = () => {
     if (selectedType && selectedColor) {
-      let path = `/images/${partKey}/${selectedType}/${selectedType} ${selectedColor}`;
-      if (selectedFinish) path = `${path}-${selectedFinish}`;
-      return encodeURI(`${path}.JPG`); // Esto convierte espacios a %20 automáticamente
+      // Reemplazar espacios por guiones y asegurarse de que todo esté en minúscula
+      const typeSlug = selectedType.replace(/\s+/g, '-').toLowerCase();
+      const colorSlug = selectedColor.replace(/\s+/g, '-').toLowerCase();
+      const finishSlug = selectedFinish?.replace(/\s+/g, '-').toLowerCase();
+  
+      let path = `/images/${partKey}/${typeSlug}/${typeSlug}-${colorSlug}`;
+      if (finishSlug) path += `-${finishSlug}`;
+  
+      return `${path}.jpg`; // extensiones en minúscula para evitar errores en servidores case-sensitive
     }
+  
     return `/images/${partKey}/standard.jpg`;
   };
 
@@ -29,8 +36,6 @@ export default function PartSelector({ partName, partKey, options, onChange }: P
     setSelectedColor(null);
     setSelectedFinish(null);
   };
-
-
 
   const handleFinishChange = (finish: string) => {
     setSelectedFinish(finish);

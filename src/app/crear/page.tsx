@@ -22,14 +22,51 @@ export default function Crear() {
   };
 
   const bodyOptions = {
-    'B-1': {
+    'B-1 cuero blanco ancho': {
+      'amarillo': [],
       'azul': [],
-      'negro': ['texturado'],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
     },
-    'B-2': {
+    'B-1 cuero marron ancho': {
+      'amarillo': [],
       'azul': [],
-      'gris': [],
-    }
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'B-1 cuero marron fino': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'B-1 cuero negro fino': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'B-1 cuero verde ancho': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
   };
 
   const neckOptions = {
