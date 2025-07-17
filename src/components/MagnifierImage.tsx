@@ -44,7 +44,7 @@ export default function MagnifierImage({ src, alt }: MagnifierImageProps) {
             height: 150,
             left: `calc(${position.x}% - 75px)`,
             top: `calc(${position.y}% - 75px)`,
-            backgroundImage: `url(${encodeURI(src)})`,
+            backgroundImage: `url(${(src)})`,
             backgroundRepeat: 'no-repeat',
             backgroundSize: '1000% 1000%',
             backgroundPosition: `${position.x}% ${position.y}%`,
