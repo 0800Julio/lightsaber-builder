@@ -27,6 +27,7 @@ export default function Crear() {
       'negro': ['texturado'],
     },
     'B-2': {
+      'azul': [],
       'gris': [],
     }
   };
@@ -34,13 +35,40 @@ export default function Crear() {
   const neckOptions = {
     'N-1': {
       'amarillo': [],
-      'gris': ['texturado', 'satinado'],
       'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
     },
     'N-2': {
-      'negro': ['mate'],
+      'amarillo': [],
       'azul': [],
-    }
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'N-3': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'N-4': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
   };
 
   const emitterOptions = {
