@@ -17,11 +17,11 @@ export default function PartSelector({ partName, partKey, options, onChange }: P
 
   const getImagePath = () => {
     if (selectedType && selectedColor) {
-      let path = `/images/${partKey}/${selectedType}/${selectedColor}`;
+      let path = `/images/${partKey}/${selectedType}/${selectedType} ${selectedColor}`;
       if (selectedFinish) path = `${path}-${selectedFinish}`;
-      return `${path}.jpg`;
+      return encodeURI(`${path}.JPG`); // Esto convierte espacios a %20 automáticamente
     }
-    return `/images/${partKey}/standard.jpg`; // Imagen "Seleccionar parte"
+    return `/images/${partKey}/standard.jpg`;
   };
 
   const handleTypeChange = (type: string) => {

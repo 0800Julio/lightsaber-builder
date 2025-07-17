@@ -23,12 +23,16 @@ export default function PartPanel({ label, short, type, imagePath, options, onCh
   useEffect(() => {
     const path = (() => {
       if (selectedType && selectedColor) {
-        let p = `/images/${type}/${selectedType}/${selectedColor}`;
-        if (selectedFinish) p += `-${selectedFinish}`;
-        return `${p}.jpg`;
+        let p = `/images/${type}/${selectedType}/${selectedType} ${selectedColor}`;
+        if (selectedFinish) p += ` ${selectedFinish}`;
+  
+        // Codifica los espacios para que funcionen en URLs
+        const encodedPath = encodeURI(`${p}.JPG`);
+        return encodedPath;
       }
       return `/images/${type}/standard.jpg`;
     })();
+  
   
     onChange(path);
   }, [selectedType, selectedColor, type, selectedFinish, onChange]);
