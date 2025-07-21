@@ -1,54 +1,85 @@
-// components/MagnifierImage.tsx
 'use client';
 
-import React, { useState } from 'react';
-import Image from 'next/image';
+import React, { useState, useRef, useEffect } from 'react';
 
 interface MagnifierImageProps {
   src: string;
-  alt: string;
+  width?: number;
+  height?: number;
+  zoom?: number;
 }
 
-export default function MagnifierImage({ src, alt }: MagnifierImageProps) {
-  const [isHovering, setIsHovering] = useState(false);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+export default function MagnifierImage({
+  src,
+  width = 300,
+  height = 600,
+  zoom = 2,
+}: MagnifierImageProps) {
+  const [showMagnifier, setShowMagnifier] = useState(false);
+  const [magnifierPos, setMagnifierPos] = useState({ x: 0, y: 0 });
+  const [imgSize, setImgSize] = useState({ width, height });
+  const imgRef = useRef<HTMLImageElement>(null);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - left) / width) * 100;
-    const y = ((e.clientY - top) / height) * 100;
-    setPosition({ x, y });
+  useEffect(() => {
+    const updateSize = () => {
+      if (imgRef.current) {
+        const rect = imgRef.current.getBoundingClientRect();
+        setImgSize({ width: rect.width, height: rect.height });
+      }
+    };
+
+    updateSize();
+    window.addEventListener('resize', updateSize);
+    return () => window.removeEventListener('resize', updateSize);
+  }, [src]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const { top, left } = e.currentTarget.getBoundingClientRect();
+    const x = e.pageX - left - window.scrollX;
+    const y = e.pageY - top - window.scrollY;
+    setMagnifierPos({ x, y });
   };
 
   return (
-    console.log(src),
-    
     <div
-      className="relative w-full h-full"
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={() => setIsHovering(false)}
-      onMouseMove={handleMouseMove}
-    >
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        className="object-fill z-10"
-      />
-
-      {isHovering && (
+  style={{
+    position: 'relative',
+    width,
+    height,
+    overflow: 'hidden',
+  }}
+  onMouseEnter={() => setShowMagnifier(true)}
+  onMouseLeave={() => setShowMagnifier(false)}
+  onMouseMove={handleMouseMove}
+>
+      <img
+  ref={imgRef}
+  src={src}
+  alt="zoom"
+  style={{
+    width,
+    height,
+    objectFit: 'contain',
+    display: 'block',
+    transition: 'none', // Evita transformaciones inesperadas
+  }}
+/>
+      {showMagnifier && (
         <div
-          className="absolute pointer-events-none rounded-full border-2 border-white"
           style={{
+            position: 'absolute',
+            pointerEvents: 'none',
+            top: magnifierPos.y - 75,
+            left: magnifierPos.x - 75,
             width: 150,
             height: 150,
-            left: `calc(${position.x}% - 75px)`,
-            top: `calc(${position.y}% - 75px)`,
-            backgroundImage: `url(${(src)})`,
+            borderRadius: '50%',
+            border: '2px solid white',
+            backgroundImage: `url('${src}')`,
             backgroundRepeat: 'no-repeat',
-            backgroundSize: '1000% 1000%',
-            backgroundPosition: `${position.x}% ${position.y}%`,
-            zIndex: 20,
+            backgroundSize: `${imgSize.width * zoom}px ${imgSize.height * zoom}px`,
+            backgroundPosition: `-${magnifierPos.x * zoom - 75}px -${magnifierPos.y * zoom - 75}px`,
+            zIndex: 999,
           }}
         />
       )}
