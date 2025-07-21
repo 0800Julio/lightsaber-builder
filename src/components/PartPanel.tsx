@@ -1,117 +1,164 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
-
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface PartPanelProps {
-  label: string; // Ej: "CUELLO"
-  short: string; // Ej: "N"
-  type: string; // Ej: "neck"
-  imagePath: string; // Miniatura con parte resaltada
-  options: Record<string, Record<string, string[]>>;
-  onChange: (path: string) => void;
+  label: string; // ✅ <- esta es la que falta
+  short: string;
+  type: 'pommel' | 'body' | 'neck' | 'emitter'; // podés ampliar si tenés más partes
+  imagePath: string;
+  options: {
+    [type: string]: {
+      [color: string]: string[];
+    };
+  };
+  onSelectionChange: (
+    type: string,
+    color: string,
+    finish: string | null
+  ) => void; // ✅ Esta es la firma correcta
 }
 
-export default function PartPanel({ label, short, type, imagePath, options, onChange }: PartPanelProps) {
-  const [expanded, setExpanded] = useState(false);
+const mapColorToCSS = (color: string) => {
+  const map: Record<string, string> = {
+    rojo: '#ff0000',
+    azul: '#0000ff',
+    verde: '#00ff00',
+    negro: '#000000',
+    blanco: '#ffffff',
+    amarillo: '#ffff00',
+    gris: '#808080',
+    // Podés agregar más si querés
+  };
+  return map[color] || color;
+};
+
+const PartPanel: React.FC<PartPanelProps> = ({ type, options, onSelectionChange }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedFinish, setSelectedFinish] = useState<string | null>(null);
 
-  // Llamamos a onChange cada vez que cambian las selecciones
-  useEffect(() => {
-    const path = (() => {
-      if (selectedType && selectedColor) {
-        let p = `/images/${type}/${selectedType}/${selectedType} ${selectedColor}`;
-        if (selectedFinish) p += ` ${selectedFinish}`;
-  
-        // Codifica los espacios para que funcionen en URLs
-        const encodedPath = encodeURI(`${p}.JPG`);
-        return encodedPath;
+  const handleTypeChange = (value: string) => {
+    setSelectedType(value);
+    setSelectedColor('standard'); // Carga color 'standard'
+    setSelectedFinish(null);
+    onSelectionChange(value, 'standard', null);
+  };
+
+  const handleColorChange = (color: string) => {
+    setSelectedColor(color);
+    setSelectedFinish(null);
+    if (selectedType) {
+      onSelectionChange(selectedType, color, null);
+    }
+  };
+
+  const handleFinishChange = (finish: string) => {
+    setSelectedFinish(finish);
+    if (selectedType && selectedColor) {
+      onSelectionChange(selectedType, selectedColor, finish);
+    }
+  };
+
+  const getImagePath = () => {
+    if (selectedType && selectedColor) {
+      let path = `/images/${type}/${selectedType}/${selectedType} ${selectedColor}`;
+      if (selectedFinish) {
+        path += ` ${selectedFinish}`;
       }
-      return `/images/${type}/standard.jpg`;
-    })();
-  
-  
-    onChange(path);
-  }, [selectedType, selectedColor, type, selectedFinish, onChange]);
-  const handleTypeChange = (val: string) => {
-    setSelectedType(val);
-    setSelectedColor(null);
-    setSelectedFinish(null);
-  };
-
-  const handleColorChange = (val: string) => {
-    setSelectedColor(val);
-    setSelectedFinish(null);
-  };
-
-  const handleFinishChange = (val: string) => {
-    setSelectedFinish(val);
+      return `${path}.JPG`;
+    }
+    return `/images/${type}/placeholder.jpg`;
   };
 
   return (
-    <div className="border-b border-gray-600 py-4">
-      {/* Header */}
-      <div
-        className="flex items-center justify-between cursor-pointer hover:bg-gray-700 p-2 rounded"
-        onClick={() => setExpanded(!expanded)}
+    <div className="border rounded-xl p-4 mb-4 bg-gray-900 shadow-lg">
+      <button
+        className="flex justify-between items-center w-full text-left text-xl font-semibold text-white mb-2"
+        onClick={() => setIsOpen(!isOpen)}
       >
-        <div className="flex items-center gap-3">
-          <Image src={imagePath} alt={label} width={50} height={50} />
-          <div>
-            <p className="text-lg font-bold">{label}</p>
-            <p className="text-sm text-gray-400">{short} ({type})</p>
+        {type.charAt(0).toUpperCase() + type.slice(1)}
+        {isOpen ? <ChevronUp /> : <ChevronDown />}
+      </button>
+
+      {isOpen && (
+        <div className="space-y-4">
+          {/* Imagen de la pieza seleccionada */}
+          <div className="w-full h-48 relative bg-black rounded-md overflow-hidden">
+            <Image
+              src={getImagePath()}
+              alt={`Vista previa de ${type}`}
+              fill
+              className="object-contain"
+            />
           </div>
-        </div>
-        <span className="text-2xl text-gray-400">{expanded ? '▲' : '▶'}</span>
-      </div>
 
-      {/* Expanded options */}
-      {expanded && (
-        <div className="mt-4 space-y-3 pl-4">
-          {/* Tipo */}
-          <select
-            className="w-full p-1 bg-gray-800 text-white rounded"
-            value={selectedType ?? ''}
-            onChange={(e) => handleTypeChange(e.target.value)}
-          >
-            <option value="">Seleccionar tipo</option>
-            {Object.keys(options).map((typeKey) => (
-              <option key={typeKey} value={typeKey}>{typeKey.toUpperCase()}</option>
-            ))}
-          </select>
-
-          {/* Color */}
-          {selectedType && (
-            <select
-              className="w-full p-1 bg-gray-800 text-white rounded"
-              value={selectedColor ?? ''}
-              onChange={(e) => handleColorChange(e.target.value)}
-            >
-              <option value="">Seleccionar color</option>
-              {Object.keys(options[selectedType]).map((color) => (
-                <option key={color} value={color}>{color.replace(/-/g, ' ')}</option>
+          {/* Tipos */}
+          <div>
+            <label className="text-white block mb-1">Seleccionar tipo:</label>
+            <div className="flex flex-wrap gap-2">
+              {Object.keys(options).map((option) => (
+                <button
+                  key={option}
+                  onClick={() => handleTypeChange(option)}
+                  className={`px-3 py-1 rounded-full text-sm font-medium ${
+                    selectedType === option ? 'bg-blue-600 text-white' : 'bg-gray-300 text-black'
+                  }`}
+                >
+                  {option}
+                </button>
               ))}
-            </select>
+            </div>
+          </div>
+
+          {/* Colores */}
+          {selectedType && (
+            <div>
+              <label className="text-white block mb-1">Seleccionar acabado:</label>
+              <div className="flex flex-wrap gap-2">
+                {Object.keys(options[selectedType]).map((color) => (
+                  <button
+                    key={color}
+                    onClick={() => handleColorChange(color)}
+                    className={`w-8 h-8 rounded-full border-2 ${
+                      selectedColor === color ? 'border-white' : 'border-gray-500'
+                    }`}
+                    style={{ backgroundColor: mapColorToCSS(color) }}
+                    title={color}
+                  />
+                ))}
+              </div>
+            </div>
           )}
 
-          {/* Acabado */}
-          {selectedType && selectedColor && options[selectedType][selectedColor].length > 0 && (
-            <select
-              className="w-full p-1 bg-gray-800 text-white rounded"
-              value={selectedFinish ?? ''}
-              onChange={(e) => handleFinishChange(e.target.value)}
-            >
-              <option value="">Seleccionar acabado</option>
-              {options[selectedType][selectedColor].map((finish) => (
-                <option key={finish} value={finish}>{finish.replace(/-/g, ' ')}</option>
-              ))}
-            </select>
+          {/* Acabados */}
+          {selectedType && selectedColor && options[selectedType][selectedColor]?.length > 0 && (
+            <div>
+              <label className="text-white block mb-1">Seleccionar textura:</label>
+              <div className="flex flex-wrap gap-2">
+                {options[selectedType][selectedColor].map((finish) => (
+                  <button
+                    key={finish}
+                    onClick={() => handleFinishChange(finish)}
+                    className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      selectedFinish === finish
+                        ? 'bg-green-600 text-white'
+                        : 'bg-gray-300 text-black'
+                    }`}
+                  >
+                    {finish}
+                  </button>
+                ))}
+              </div>
+            </div>
           )}
         </div>
       )}
     </div>
   );
-}
+};
+
+export default PartPanel;

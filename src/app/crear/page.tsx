@@ -118,90 +118,90 @@ export default function Crear() {
     }
   };
 
-  return (
-    
-    <main className="min-h-screen bg-black text-white px-6 py-10">
-      <header className="w-full bg-black border-b border-gray-700 px-6 py-4 flex items-center justify-between">
-  {/* Logo */}
-  <div className="flex items-center gap-2">
-    <Image
-      src="/images/icons/logo.jpg" // reemplazá este path luego
-      alt="Logo"
-      width={80}
-      height={80}
-    />
-    <span className="text-xl font-bold text-white">El taller de han zolo</span>
-  </div>
+  const buildImagePath = (type: string, part: string, color: string | null, finish: string | null) => {
+    const safeColor = color ?? 'standard';
+    const safeFinish = finish ? ` ${finish}` : '';
+    const fileName = `${part} ${safeColor}${safeFinish}.JPG`;
+    return `/images/${type}/${part}/${fileName}`;
+  };
 
-  {/* Futuro menú o botón */}
-  <div>
-    {/* Dejá este div para futuras opciones */}
-  </div>
-</header>
+  return (
+    <main className="min-h-screen bg-black text-white px-6 py-10">
+      <header className="w-full bg-black border-b border-gray-700 px-1 py-1 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Image
+            src="/images/icons/logo.jpg"
+            alt="Logo"
+            width={80}
+            height={80}
+          />
+          <span className="text-xl font-bold text-white">El taller de han zolo</span>
+        </div>
+      </header>
+
       <h1 className="text-4xl font-bold text-center mb-10 text-blue-400 drop-shadow">
         Diseñador virtual de Lightsabers
       </h1>
 
       <div className="flex gap-8">
-        {/* Vista previa del sable */}
         <div className="flex-1 flex items-center justify-center bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-700">
-          <div className="flex gap-0 overflow-x-auto max-w-full">
-            {/* Pommel */}
-            <div className="relative group z-10 w-[25vw] max-w-[200px] h-[35vw] max-h-[800px]">
-              <Image
-                src={pommelImage}
-                alt="Pommel"
-                fill
-                className=""
-              />
+          <div className="flex gap-0 max-w-full">
+
+            <div className="relative group w-[25vw] max-w-[152px] h-[35vw] max-h-[670px]">
+            <Image
+            src={pommelImage}
+            alt="Pommel"
+            fill
+            className="object-contain"
+            />
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black bg-opacity-50">
-              <MagnifierImage src={pommelImage} alt="Pommel" />
+                <MagnifierImage src={pommelImage} width={152} height={670} zoom={2}   />
               </div>
             </div>
 
-            {/* Body */}
-            <div className="relative group z-10 w-[25vw] max-w-[800px] h-[35vw] max-h-[800px]">
-              <Image
-                src={bodyImage}
-                alt="Body"
-                fill
-                className=""
-              />
+
+            <div className="relative group z-10 w-[25vw] max-w-[447px] h-[35vw] max-h-[670px]">
+            <Image
+            src={bodyImage}
+            alt="Body"
+            fill
+            className="object-contain"/>
+
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black bg-opacity-50">
-                <MagnifierImage src={bodyImage} alt="Body" />
+              <MagnifierImage src={bodyImage} width={447} height={670} zoom={2} />
               </div>
             </div>
 
-            {/* Neck */}
-            <div className="relative group z-0 w-[20vw] max-w-[200px] h-[35vw] max-h-[800px] -ml-6 -mr-6">
-              <Image
-                src={neckImage}
-                alt="Neck"
-                fill
-                className=""
-                sizes="(max-width: 768px) 25vw, 100px"
-              />
+
+
+            <div className="relative group w-[25vw] max-w-[153px] h-[35vw] max-h-[670px] -ml-6 -mr-6">
+            <Image
+            src={neckImage}
+            alt="Neck"
+            fill
+            className="object-contain"/>
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black bg-opacity-50">
-                <MagnifierImage src={neckImage} alt="Neck" />
+                <MagnifierImage src={neckImage} width={153} height={670} zoom={2}  />
               </div>
             </div>
 
-            {/* Emitter */}
-            <div className="relative group z-10 w-[25vw] max-w-[300px] h-[35vw] max-h-[800px]">
-              <Image
-                src={emitterImage}
-                alt="Emitter"
-                fill
-                className=""
-              />
+
+
+
+            <div className="relative group w-[25vw] max-w-[271px] h-[35vw] max-h-[670px]">
+            <Image
+            src={emitterImage}
+            alt="Emitter"
+            fill
+            className="object-contain"/>
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black bg-opacity-50">
-                <MagnifierImage src={emitterImage} alt="Emitter" />
+                <MagnifierImage src={emitterImage} width={270} height={670} zoom={2} />
               </div>
+
             </div>
           </div>
         </div>
 
-        {/* Panel lateral de selección */}
         <aside className="w-[300px] bg-gray-800 p-4 rounded-xl shadow-md border border-gray-700 space-y-4">
           <PartPanel
             label="PUNTA TRASERA"
@@ -209,7 +209,9 @@ export default function Crear() {
             type="pommel"
             imagePath="/images/icons/ICONO_P.JPG"
             options={pommelOptions}
-            onChange={setPommelImage}
+            onSelectionChange={(type, color, finish) => {
+              setPommelImage(buildImagePath('pommel', type, color, finish));
+            }}
           />
           <PartPanel
             label="CUERPO"
@@ -217,7 +219,9 @@ export default function Crear() {
             type="body"
             imagePath="/images/icons/ICONO_B.JPG"
             options={bodyOptions}
-            onChange={setBodyImage}
+            onSelectionChange={(type, color, finish) => {
+              setBodyImage(buildImagePath('body', type, color, finish));
+            }}
           />
           <PartPanel
             label="CUELLO"
@@ -225,7 +229,9 @@ export default function Crear() {
             type="neck"
             imagePath="/images/icons/ICONO_N.JPG"
             options={neckOptions}
-            onChange={setNeckImage}
+            onSelectionChange={(type, color, finish) => {
+              setNeckImage(buildImagePath('neck', type, color, finish));
+            }}
           />
           <PartPanel
             label="PICO"
@@ -233,7 +239,9 @@ export default function Crear() {
             type="emitter"
             imagePath="/images/icons/ICONO_E.JPG"
             options={emitterOptions}
-            onChange={setEmitterImage}
+            onSelectionChange={(type, color, finish) => {
+              setEmitterImage(buildImagePath('emitter', type, color, finish));
+            }}
           />
         </aside>
       </div>
