@@ -10,15 +10,132 @@ export default function Crear() {
   const [bodyImage, setBodyImage] = useState('/images/body/standard.jpg');
   const [neckImage, setNeckImage] = useState('/images/neck/standard.jpg');
   const [emitterImage, setEmitterImage] = useState('/images/emitter/standard.jpg');
+  const [openPanel, setOpenPanel] = useState<string | null>(null);
+
+  const [pommelIcon, setPommelIcon] = useState('/images/previews/pommel/placeholder.jpg');
+  const [bodyIcon, setBodyIcon] = useState('/images/previews/body/placeholder.jpg');
+  const [neckIcon, setNeckIcon] = useState('/images/previews/neck/placeholder.jpg');
+  const [emitterIcon, setEmitterIcon] = useState('/images/previews/emitter/placeholder.jpg');
 
   const pommelOptions = {
     'P-1': {
-      'gris': ['satinado'],
-      'negro': []
+      'gris': ['texturado'],
+      'negro': ['texturado'],
+      'amarillo': [],
+      'azul': [],
+      'pulido': [],
+      'rojo': [],
+      'standard': [],
     },
     'P-2': {
+      'gris': ['texturado'],
+      'negro': ['texturado'],
+      'amarillo': [],
+      'azul': [],
+      'pulido': [],
       'rojo': [],
-    }
+      'standard': [],
+    },
+    'P-3': {
+      'gris': ['texturado'],
+      'negro': ['texturado'],
+      'amarillo': [],
+      'azul': [],
+      'pulido': [],
+      'rojo': [],
+      'standard': [],
+    },
+    'P-4': {
+      'gris': ['texturado'],
+      'negro': ['texturado'],
+      'amarillo': [],
+      'azul': [],
+      'pulido': [],
+      'rojo': [],
+      'standard': [],
+    },
+    'P-5': {
+      'gris': ['texturado'],
+      'negro': ['texturado'],
+      'amarillo': [],
+      'azul': [],
+      'pulido': [],
+      'rojo': [],
+      'standard': [],
+    },
+    'P-6': {
+      'gris': ['texturado'],
+      'negro': ['texturado'],
+      'amarillo': [],
+      'azul': [],
+      'pulido': [],
+      'rojo': [],
+      'standard': [],
+    },
+    'P-7': {
+      'gris': ['texturado'],
+      'negro': ['texturado'],
+      'amarillo': [],
+      'azul': [],
+      'pulido': [],
+      'rojo': [],
+      'standard': [],
+    },
+    'P-8': {
+      'gris': ['texturado'],
+      'negro': ['texturado'],
+      'amarillo': [],
+      'azul': [],
+      'pulido': [],
+      'rojo': [],
+      'standard': [],
+    },
+    'P-9': {
+      'gris': ['texturado'],
+      'negro': ['texturado'],
+      'amarillo': [],
+      'azul': [],
+      'pulido': [],
+      'rojo': [],
+      'standard': [],
+    },
+    'P-10': {
+      'gris': ['texturado'],
+      'negro': ['texturado'],
+      'amarillo': [],
+      'azul': [],
+      'pulido': [],
+      'rojo': [],
+      'standard': [],
+    },
+    'P-11': {
+      'gris': ['texturado'],
+      'negro': ['texturado'],
+      'amarillo': [],
+      'azul': [],
+      'pulido': [],
+      'rojo': [],
+      'standard': [],
+    },
+    'P-12': {
+      'gris': ['texturado'],
+      'negro': ['texturado'],
+      'amarillo': [],
+      'azul': [],
+      'pulido': [],
+      'rojo': [],
+      'standard': [],
+    },
+    'P-13': {
+      'gris': ['texturado'],
+      'negro': ['texturado'],
+      'amarillo': [],
+      'azul': [],
+      'pulido': [],
+      'rojo': [],
+      'standard': [],
+    },
+    
   };
 
   const bodyOptions = {
@@ -67,6 +184,82 @@ export default function Crear() {
       'pulido': [],
       'rojo': [],
     },
+    'B-2': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'B-3': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'B-4': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'B-5': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'B-6': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'B-7': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'B-8': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'B-9': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'B-10': {
+    },
+    'B-11': {
+    },
   };
 
   const neckOptions = {
@@ -106,16 +299,249 @@ export default function Crear() {
       'pulido': [],
       'rojo': [],
     },
+    'N-5': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    
+    'N-6': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    
+    'N-7': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    
+    'N-8': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    
+    'N-9': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    
+    'N-10': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    
+    'N-11': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'N-12': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'N-13': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
   };
 
   const emitterOptions = {
-    'E-1': {
+     'E-1': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
       'rojo': [],
-      'gris': ['satinado'],
     },
     'E-2': {
-      'negro': []
-    }
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'E-3': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'E-4': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'E-5': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'E-6': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'E-7': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'E-8': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'E-9': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'E-10': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'E-11-4': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'E-11-5': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'E-11-6': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'E-12-1': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'E-12-2': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'E-12-3': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
+    'E-13-3': {
+      'amarillo': [],
+      'azul': [],
+      'blanco': [],
+      'gris': ['texturado', 'satinado'],
+      'negro': ['texturado', 'satinado'],
+      'pulido': [],
+      'rojo': [],
+    },
   };
 
   const buildImagePath = (type: string, part: string, color: string | null, finish: string | null) => {
@@ -247,7 +673,13 @@ export default function Crear() {
             options={pommelOptions}
             onSelectionChange={(type, color, finish) => {
               setPommelImage(buildImagePath('pommel', type, color, finish));
+              setPommelIcon(`/images/pommel/${type}/${type}.JPG`);
             }}
+            isOpen={openPanel === 'pommel'}
+            onToggle={() =>
+            setOpenPanel((prev) => (prev === 'pommel' ? null : 'pommel'))
+            }
+            iconPath={pommelIcon}
           />
           <PartPanel
             label="CUERPO"
@@ -257,7 +689,13 @@ export default function Crear() {
             options={bodyOptions}
             onSelectionChange={(type, color, finish) => {
               setBodyImage(buildImagePath('body', type, color, finish));
+              setBodyIcon(`/images/body/${type}/${type}.JPG`);
             }}
+            isOpen={openPanel === 'body'}
+            onToggle={() =>
+            setOpenPanel((prev) => (prev === 'body' ? null : 'body'))
+            }
+            iconPath={bodyIcon}
           />
           <PartPanel
             label="CUELLO"
@@ -267,7 +705,13 @@ export default function Crear() {
             options={neckOptions}
             onSelectionChange={(type, color, finish) => {
               setNeckImage(buildImagePath('neck', type, color, finish));
+              setNeckIcon(`/images/neck/${type}/${type}.JPG`);
             }}
+            isOpen={openPanel === 'neck'}
+            onToggle={() =>
+            setOpenPanel((prev) => (prev === 'neck' ? null : 'neck'))
+            }
+            iconPath={neckIcon}
           />
           <PartPanel
             label="PICO"
@@ -277,7 +721,13 @@ export default function Crear() {
             options={emitterOptions}
             onSelectionChange={(type, color, finish) => {
               setEmitterImage(buildImagePath('emitter', type, color, finish));
+              setEmitterIcon(`/images/emitter/${type}/${type}.JPG`);
             }}
+            isOpen={openPanel === 'emitter'}
+            onToggle={() =>
+            setOpenPanel((prev) => (prev === 'emitter' ? null : 'emitter'))
+            }
+            iconPath={emitterIcon}
           />
         </aside>
       </div>
