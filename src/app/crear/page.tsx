@@ -144,63 +144,99 @@ export default function Crear() {
       </h1>
 
       <div className="flex gap-8">
-        <div className="flex-1 flex items-center justify-center bg-gray-900 p-6 rounded-xl shadow-lg border border-gray-700">
+        <div className="flex-1 flex items-center justify-center bg-white p-6 rounded-xl shadow-lg border border-gray-700"
+        
+        >
           <div className="flex gap-0 max-w-full">
 
-            <div className="relative group w-[25vw] max-w-[152px] h-[35vw] max-h-[670px]">
-            <Image
-            src={pommelImage}
-            alt="Pommel"
-            fill
-            className="object-contain"
-            />
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black bg-opacity-50">
-                <MagnifierImage src={pommelImage} width={152} height={670} zoom={2}   />
-              </div>
-            </div>
+            
+<div className="flex gap-0 max-w-full overflow-visible">
+  {/* Pommel */}
+  <div className="relative group w-[25vw] max-w-[152.5px] h-[35vw] max-h-[674px]">
+    <Image
+      src={pommelImage}
+      alt="Pommel"
+      fill
+      className="object-contain"
+    />
+    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black bg-opacity-50">
+      <MagnifierImage src={pommelImage} width={152.5} height={674} zoom={2} />
+    </div>
+  </div>
 
-
-            <div className="relative group z-10 w-[25vw] max-w-[447px] h-[35vw] max-h-[670px]">
-            <Image
-            src={bodyImage}
-            alt="Body"
-            fill
-            className="object-contain"/>
-
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black bg-opacity-50">
-              <MagnifierImage src={bodyImage} width={447} height={670} zoom={2} />
-              </div>
-            </div>
-
-
-
-            <div className="relative group w-[25vw] max-w-[153px] h-[35vw] max-h-[670px] -ml-6 -mr-6">
-            <Image
-            src={neckImage}
-            alt="Neck"
-            fill
-            className="object-contain"/>
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black bg-opacity-50">
-                <MagnifierImage src={neckImage} width={153} height={670} zoom={2}  />
-              </div>
-            </div>
+  {/* Body */}
+  <div className="relative group z-10 w-[25vw] max-w-[449px] h-[35vw] max-h-[671px]">
+    <Image
+      src={bodyImage}
+      alt="Body"
+      fill
+      className="object-contain"
+    />
+    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black bg-opacity-50">
+      <MagnifierImage src={bodyImage} width={449} height={671} zoom={2} />
+    </div>
+  </div>
 
 
 
+  
 
-            <div className="relative group w-[25vw] max-w-[271px] h-[35vw] max-h-[670px]">
-            <Image
-            src={emitterImage}
-            alt="Emitter"
-            fill
-            className="object-contain"/>
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black bg-opacity-50">
-                <MagnifierImage src={emitterImage} width={270} height={670} zoom={2} />
-              </div>
+  {/* Neck (pieza N) */}
+<div className="relative w-[25vw] max-w-[153px] h-[35vw] max-h-[670px] -ml-6 -mr-6 flex items-end">
+  {/* Parte superior (plano 2D), debajo de las otras piezas */}
+  <div className="absolute inset-0 z-0"
+       style={{
+         WebkitMaskImage: 'linear-gradient(#fafafa00 40%, #ffffff 0%, #ededed 100%))',
+         maskImage: 'linear-gradient(to bottom, black 0%, black 33%, transparent 66%, transparent 100%)'
+       }}>
+    <Image
+      src={neckImage}
+      alt="Neck 2D"
+      fill
+      className="object-contain"
+      style={{ objectPosition: 'top' }}
+      draggable={false}
+    />
+  </div>
+  {/* Parte inferior (vista real), por encima de las otras piezas */}
+  <div className="absolute inset-0 z-20"
+       style={{
+         maskImage: 'linear-gradient(to bottom, transparent 0%, transparent 33%, black 10%, black 0%)'
+       }}>
+    <Image
+      src={neckImage}
+      alt="Neck Real"
+      fill
+      className="object-contain"
+      style={{ objectPosition: 'top' }}
+      draggable={false}
+    />
+  </div>
+  {/* Magnifier y hover solo en la capa superior */}
+  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black bg-opacity-50 z-10">
+    <MagnifierImage src={neckImage} width={153} height={670} zoom={2} />
+  </div>
+</div>
 
-            </div>
-          </div>
-        </div>
+
+
+
+
+  {/* Emitter */}
+  <div className="relative group w-[25vw] max-w-[268px] h-[35vw] max-h-[670px]">
+    <Image
+      src={emitterImage}
+      alt="Emitter"
+      fill
+      className="object-contain"
+    />
+    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black bg-opacity-50">
+      <MagnifierImage src={emitterImage} width={268} height={670} zoom={2} />
+    </div>
+  </div>
+</div>
+</div>
+</div>
 
         <aside className="w-[300px] bg-gray-800 p-4 rounded-xl shadow-md border border-gray-700 space-y-4">
           <PartPanel
