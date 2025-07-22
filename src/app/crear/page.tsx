@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import PartPanel from '@/components/PartPanel';
 import MagnifierImage from '@/components/MagnifierImage';
+import { motion } from 'framer-motion';
 
 export default function Crear() {
   const [pommelImage, setPommelImage] = useState('/images/pommel/standard.jpg');
@@ -552,23 +553,85 @@ export default function Crear() {
   };
 
   return (
-    <main className="min-h-screen bg-black text-white px-6 py-10">
-      <header className="w-full bg-black border-b border-gray-700 px-1 py-1 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Image
-            src="/images/icons/logo.jpg"
-            alt="Logo"
-            width={80}
-            height={80}
-          />
-          <span className="text-xl font-bold text-white">El taller de han zolo</span>
-        </div>
-      </header>
+    <main className="min-h-screen bg-black text-white px-3 py-3">
+      <motion.header
+  initial={{ opacity: 0, y: -20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8, ease: 'easeOut' }}
+  className="fixed top-0 left-0 w-full bg-black text-white shadow z-50 h-18 flex items-center px-6"
+>
+  {/* Contenedor para logo y nav */}
+  <div className="flex items-center justify-between w-full">
+    {/* Logo a la izquierda */}
+    <a href="#inicio" className="flex-shrink-0 mr-6">
+      <img src="/images/icons/logo.JPG" alt="Logo" className="h-25 w-25" />
+    </a>
 
-      <h1 className="text-4xl font-bold text-center mb-10 text-blue-400 drop-shadow">
-        Diseñador virtual de Lightsabers
-      </h1>
+    {/* Navegación centrada */}
+    <nav className="flex gap-6 items-center mx-auto">
+      <a
+        href="#inicio"
+        className="relative text-white text-lg font-medium transition hover:text-orange-400
+          after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-[2px]
+          after:bg-orange-400 after:opacity-0 hover:after:opacity-100
+          hover:after:shadow-[0_0_6px_2px_rgba(255,115,0,0.7)] after:transition-all"
+      >
+        Materiales de la Empuñadura
+      </a>
+      <a
+        href="#pommel"
+        className="relative text-white text-lg font-medium transition hover:text-orange-400
+          after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-[2px]
+          after:bg-orange-400 after:opacity-0 hover:after:opacity-100
+          hover:after:shadow-[0_0_6px_2px_rgba(255,115,0,0.7)] after:transition-all"
+      >
+        Que incluye
+      </a>
+      <a
+        href="#body"
+        className="relative text-white text-lg font-medium transition hover:text-orange-400
+          after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-[2px]
+          after:bg-orange-400 after:opacity-0 hover:after:opacity-100
+          hover:after:shadow-[0_0_6px_2px_rgba(255,115,0,0.7)] after:transition-all"
+      >
+        Instrucciones de Uso
+      </a>
+      <a
+        href="#neck"
+        className="relative text-white text-lg font-medium transition hover:text-orange-400
+          after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-[2px]
+          after:bg-orange-400 after:opacity-0 hover:after:opacity-100
+          hover:after:shadow-[0_0_6px_2px_rgba(255,115,0,0.7)] after:transition-all"
+      >
+        World Wide Orders
+      </a>
+      <a
+        href="#emitter"
+        className="relative text-white text-lg font-medium transition hover:text-orange-400
+          after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-[2px]
+          after:bg-orange-400 after:opacity-0 hover:after:opacity-100
+          hover:after:shadow-[0_0_6px_2px_rgba(255,115,0,0.7)] after:transition-all"
+      >
+        Galeria de Fotos
+      </a>
+    </nav>
+  </div>
+</motion.header>
 
+
+      <div className="h-3 pt-18" /> {/* Separador para que no tape el navbar */}
+      <h1
+  className="text-4xl font-bold text-center mb-8"
+  style={{
+    color: '#FF6F00', // naranja neón
+    fontFamily: "'Orbitron', sans-serif",
+    textShadow:
+      '0 0 5px #FF6F00, 0 0 10px #FF6F00, 0 0 20px #FF6F00, 0 0 40px #FF6F00',
+    animation: 'neonGlow 2.5s ease-in-out infinite alternate',
+  }}
+>
+  Diseñador virtual de Lightsabers
+</h1>
       <div className="flex gap-8">
         <div className="flex-1 flex items-center justify-center bg-white p-6 rounded-xl shadow-lg border border-gray-700"
         

@@ -16,3 +16,12 @@ body {
     color: var(--foreground);
     font-family: Arial, Helvetica, sans-serif;
 }
+
+@keyframes neonGlow {
+    0% {
+        text-shadow: 0 0 5px #FF6F00, 0 0 10px #FF6F00, 0 0 20px #FF6F00, 0 0 40px #FF6F00;
+    }
+    100% {
+        text-shadow: 0 0 10px #FFB300, 0 0 20px #FFB300, 0 0 30px #FFB300, 0 0 50px #FFB300;
+    }
+}
