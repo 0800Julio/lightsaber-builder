@@ -25,3 +25,104 @@ body {
         text-shadow: 0 0 10px #FFB300, 0 0 20px #FFB300, 0 0 30px #FFB300, 0 0 50px #FFB300;
     }
 }
+
+/* Mejoras para responsividad y zoom */
+.lightsaber-container {
+    width: 100%;
+    max-width: 100%;
+    overflow: visible;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0;
+}
+
+.lightsaber-part {
+    flex-shrink: 0;
+    position: relative;
+    /* Evitar movimientos durante hover */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000;
+    /* Eliminar cualquier espacio entre las piezas */
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+}
+
+.lightsaber-part img {
+    will-change: auto;
+    transform: translateZ(0);
+    /* Asegurar que no hay espacios */
+    display: block;
+    margin: 0;
+    padding: 0;
+}
+
+/* Evitar shifts de layout */
+.lightsaber-part:hover {
+    transform: translateZ(0);
+}
+
+/* Eliminar cualquier gap o spacing */
+.lightsaber-container * {
+    box-sizing: border-box;
+}
+
+/* Breakpoints para diferentes tamaños - Sistema escalable optimizado */
+@media (max-width: 1400px) {
+    .lightsaber-container {
+        transform: scale(0.95);
+        transform-origin: center;
+    }
+}
+
+@media (max-width: 1200px) {
+    .lightsaber-container {
+        transform: scale(0.85);
+        transform-origin: center;
+    }
+}
+
+@media (max-width: 1024px) {
+    .lightsaber-container {
+        transform: scale(0.7);
+        transform-origin: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .lightsaber-container {
+        transform: scale(0.55);
+        transform-origin: center;
+    }
+}
+
+@media (max-width: 640px) {
+    .lightsaber-container {
+        transform: scale(0.4);
+        transform-origin: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .lightsaber-container {
+        transform: scale(0.3);
+        transform-origin: center;
+    }
+}
+
+/* Mejora para zoom del navegador */
+@media (min-resolution: 120dpi) {
+    .lightsaber-container {
+        transform: scale(0.9);
+    }
+}
+
+/* Eliminar espacios innecesarios */
+.lightsaber-container > div {
+    margin: 0;
+    padding: 0;
+}
