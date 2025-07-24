@@ -80,7 +80,11 @@ export default function MagnifierImage({
           transform: 'none',
           pointerEvents: 'none',
           backgroundColor: 'transparent',
+          imageRendering: 'auto',
+          filter: 'contrast(1.05) saturate(1.1)',
         }}
+        loading="eager"
+        decoding="sync"
       />
       {showMagnifier && imgSize.width > 0 && (
         <div
@@ -103,6 +107,8 @@ export default function MagnifierImage({
             zIndex: 999,
             transition: 'none',
             backgroundBlendMode: 'normal',
+            filter: 'contrast(1.1) saturate(1.2) brightness(1.05)',
+            imageRendering: 'auto' as const,
           }}
         >
           <div

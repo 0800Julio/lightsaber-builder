@@ -12,11 +12,48 @@ export default function Crear() {
   const [neckImage, setNeckImage] = useState('/images/neck/standard.jpg');
   const [emitterImage, setEmitterImage] = useState('/images/emitter/standard.jpg');
   const [openPanel, setOpenPanel] = useState<string | null>(null);
+  const [currentNeckType, setCurrentNeckType] = useState<string>('standard');
 
   const [pommelIcon, setPommelIcon] = useState('/images/previews/pommel/placeholder.jpg');
   const [bodyIcon, setBodyIcon] = useState('/images/previews/body/placeholder.jpg');
   const [neckIcon, setNeckIcon] = useState('/images/previews/neck/placeholder.jpg');
   const [emitterIcon, setEmitterIcon] = useState('/images/previews/emitter/placeholder.jpg');
+
+  // Configuración de márgenes específicos para cada pieza N
+  const neckMarginConfig: Record<string, { marginLeft: string; marginRight: string }> = {
+    'standard': { marginLeft: '-10px', marginRight: '-16px' },
+    'N-1': { marginLeft: '-12px', marginRight: '-15px' },
+    'N-2': { marginLeft: '-17px', marginRight: '-22px' },
+    'N-3': { marginLeft: '-6px', marginRight: '-12px' },
+    'N-4': { marginLeft: '-10px', marginRight: '-16px' },
+    'N-5': { marginLeft: '-14px', marginRight: '-20px' },
+    'N-6': { marginLeft: '-8px', marginRight: '-14px' },
+    'N-7': { marginLeft: '-10px', marginRight: '-16px' },
+    'N-8': { marginLeft: '-12px', marginRight: '-18px' },
+    'N-9': { marginLeft: '-8px', marginRight: '-14px' },
+    'N-10': { marginLeft: '-10px', marginRight: '-16px' },
+    'N-11': { marginLeft: '-6px', marginRight: '-12px' },
+    'N-12': { marginLeft: '-14px', marginRight: '-20px' },
+    'N-13': { marginLeft: '-10px', marginRight: '-16px' },
+  };
+
+  // Configuración de clip-path específicos para cada pieza N (parte superior)
+  const neckClipPathConfig: Record<string, { top: string; right: string; bottom: string; left: string }> = {
+    'standard': { top: '0%', right: '11%', bottom: '30%', left: '0%' },
+    'N-1': { top: '0%', right: '12%', bottom: '30%', left: '12%' },
+    'N-2': { top: '0%', right: '17%', bottom: '30%', left: '16%' },
+    'N-3': { top: '0%', right: '5%', bottom: '30%', left: '0%' },
+    'N-4': { top: '0%', right: '11%', bottom: '30%', left: '0%' },
+    'N-5': { top: '0%', right: '22%', bottom: '30%', left: '0%' },
+    'N-6': { top: '0%', right: '8%', bottom: '30%', left: '0%' },
+    'N-7': { top: '0%', right: '11%', bottom: '30%', left: '0%' },
+    'N-8': { top: '0%', right: '15%', bottom: '30%', left: '0%' },
+    'N-9': { top: '0%', right: '8%', bottom: '30%', left: '0%' },
+    'N-10': { top: '0%', right: '11%', bottom: '30%', left: '0%' },
+    'N-11': { top: '0%', right: '5%', bottom: '30%', left: '0%' },
+    'N-12': { top: '0%', right: '22%', bottom: '30%', left: '0%' },
+    'N-13': { top: '0%', right: '11%', bottom: '30%', left: '0%' },
+  };
 
   const pommelOptions = {
     'P-1': {
@@ -552,6 +589,17 @@ export default function Crear() {
     return `/images/${type}/${part}/${fileName}`;
   };
 
+  // Función para obtener los márgenes dinámicos de la pieza N
+  const getNeckMargins = () => {
+    return neckMarginConfig[currentNeckType] || neckMarginConfig['standard'];
+  };
+
+  // Función para obtener el clip-path dinámico de la pieza N (parte superior)
+  const getNeckClipPath = () => {
+    const config = neckClipPathConfig[currentNeckType] || neckClipPathConfig['standard'];
+    return `inset(${config.top} ${config.right} ${config.bottom} ${config.left})`;
+  };
+
   return (
     <main className="min-h-screen bg-black text-white px-3 py-3 overflow-x-auto">
       <motion.header
@@ -648,6 +696,9 @@ export default function Crear() {
                     className="object-contain"
                     sizes="140px"
                     style={{ objectPosition: 'bottom' }}
+                    quality={95}
+                    priority={true}
+                    unoptimized={false}
                   />
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
                     <MagnifierImage src={pommelImage} width={140} height={550} zoom={2} />
@@ -663,6 +714,9 @@ export default function Crear() {
                     className="object-contain"
                     sizes="380px"
                     style={{ objectPosition: 'bottom' }}
+                    quality={95}
+                    priority={true}
+                    unoptimized={false}
                   />
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-40 pointer-events-none group-hover:pointer-events-auto">
                     <MagnifierImage src={bodyImage} width={380} height={550} zoom={2} />
@@ -670,11 +724,16 @@ export default function Crear() {
                 </div>
 
                 {/* Neck (pieza N) - Restaurando comportamiento original */}
-                <div className="relative group z-30 lightsaber-part flex items-end" style={{ width: '130px', height: '550px', marginLeft: '-10px', marginRight: '-16px' }}>
+                <div className="relative group z-30 lightsaber-part flex items-end" style={{ 
+                  width: '130px', 
+                  height: '550px', 
+                  marginLeft: getNeckMargins().marginLeft, 
+                  marginRight: getNeckMargins().marginRight 
+                }}>
                   {/* Parte superior (plano 2D), debajo de las otras piezas - SOLO EL 30% SUPERIOR */}
                   <div className="absolute inset-0 z-0"
                        style={{
-                         clipPath: 'inset(0% 11% 30%)',
+                         clipPath: getNeckClipPath(),
                          opacity: 1,
                          zIndex: -1
                        }}>
@@ -686,6 +745,9 @@ export default function Crear() {
                       style={{ objectPosition: 'top' }}
                       sizes="130px"
                       draggable={false}
+                      quality={95}
+                      priority={true}
+                      unoptimized={false}
                     />
                   </div>
                   {/* Parte inferior (vista real), por encima de las otras piezas - SOLO EL 70% INFERIOR */}
@@ -703,6 +765,9 @@ export default function Crear() {
                       style={{ objectPosition: 'bottom' }}
                       sizes="130px"
                       draggable={false}
+                      quality={95}
+                      priority={true}
+                      unoptimized={false}
                     />
                   </div>
                   {/* Magnifier y hover - Por encima de todo para mostrar imagen completa */}
@@ -720,6 +785,9 @@ export default function Crear() {
                     className="object-contain"
                     sizes="240px"
                     style={{ objectPosition: 'bottom' }}
+                    quality={95}
+                    priority={true}
+                    unoptimized={false}
                   />
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
                     <MagnifierImage src={emitterImage} width={240} height={550} zoom={2} />
@@ -772,6 +840,7 @@ export default function Crear() {
             onSelectionChange={(type, color, finish) => {
               setNeckImage(buildImagePath('neck', type, color, finish));
               setNeckIcon(`/images/neck/${type}/${type}.JPG`);
+              setCurrentNeckType(type); // Actualizar el tipo de neck seleccionado
             }}
             isOpen={openPanel === 'neck'}
             onToggle={() =>

@@ -126,3 +126,35 @@ body {
     margin: 0;
     padding: 0;
 }
+
+/* Mejoras para calidad de imagen */
+.lightsaber-part img,
+.lightsaber-part Image,
+img[alt="Pommel"],
+img[alt="Body"], 
+img[alt="Neck 2D"],
+img[alt="Neck Real"],
+img[alt="Emitter"] {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: optimize-quality;
+    filter: contrast(1.02) saturate(1.05);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+}
+
+/* Optimización específica para zoom */
+@media (min-resolution: 144dpi),
+       (-webkit-min-device-pixel-ratio: 1.5) {
+    .lightsaber-part img {
+        image-rendering: -webkit-optimize-contrast;
+        filter: contrast(1.05) saturate(1.08) brightness(1.02);
+    }
+}
+
+/* Transiciones suaves para cambios dinámicos */
+.lightsaber-part {
+    transition: margin-left 0.3s ease-in-out, margin-right 0.3s ease-in-out;
+}
