@@ -553,7 +553,7 @@ export default function Crear() {
   };
 
   return (
-    <main className="min-h-screen bg-black text-white px-3 py-3">
+    <main className="min-h-screen bg-black text-white px-3 py-3 overflow-x-auto">
       <motion.header
   initial={{ opacity: 0, y: -20 }}
   animate={{ opacity: 1, y: 0 }}
@@ -632,102 +632,105 @@ export default function Crear() {
 >
   Diseñador virtual de Lightsabers
 </h1>
-      <div className="flex gap-8">
-        <div className="flex-1 flex items-center justify-center bg-white p-6 rounded-xl shadow-lg border border-gray-700"
-        
-        >
-          <div className="flex gap-0 max-w-full">
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 h-full">
+        <div className="flex-1 lg:flex-grow lg:flex-shrink lg:basis-0 flex items-center justify-center bg-white p-2 lg:p-4 rounded-xl shadow-lg border border-gray-700" style={{ minHeight: '600px' }}>
+          <div className="w-full max-w-none lightsaber-container">
+            {/* Container optimizado para el saber */}
+            <div className="relative w-full h-full flex items-center justify-center" style={{ minHeight: '550px' }}>
+              <div className="flex items-end overflow-visible relative" style={{ height: '550px', gap: '0px' }}>
+                
+                {/* Pommel */}
+                <div className="relative group lightsaber-part flex items-end" style={{ width: '140px', height: '550px', marginRight: '-4px' }}>
+                  <Image
+                    src={pommelImage}
+                    alt="Pommel"
+                    fill
+                    className="object-contain"
+                    sizes="140px"
+                    style={{ objectPosition: 'bottom' }}
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
+                    <MagnifierImage src={pommelImage} width={140} height={550} zoom={2} />
+                  </div>
+                </div>
 
-            
-<div className="flex gap-0 max-w-full overflow-visible">
-  {/* Pommel */}
-  <div className="relative group w-[25vw] max-w-[152.5px] h-[35vw] max-h-[674px]">
-    <Image
-      src={pommelImage}
-      alt="Pommel"
-      fill
-      className="object-contain"
-    />
-    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black bg-opacity-50">
-      <MagnifierImage src={pommelImage} width={152.5} height={674} zoom={2} />
-    </div>
-  </div>
+                {/* Body */}
+                <div className="relative group z-10 lightsaber-part flex items-end" style={{ width: '380px', height: '550px', marginLeft: '-10px', marginRight: '-10px' }}>
+                  <Image
+                    src={bodyImage}
+                    alt="Body"
+                    fill
+                    className="object-contain"
+                    sizes="380px"
+                    style={{ objectPosition: 'bottom' }}
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-40 pointer-events-none group-hover:pointer-events-auto">
+                    <MagnifierImage src={bodyImage} width={380} height={550} zoom={2} />
+                  </div>
+                </div>
 
-  {/* Body */}
-  <div className="relative group z-10 w-[25vw] max-w-[449px] h-[35vw] max-h-[671px]">
-    <Image
-      src={bodyImage}
-      alt="Body"
-      fill
-      className="object-contain"
-    />
-    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black bg-opacity-50">
-      <MagnifierImage src={bodyImage} width={449} height={671} zoom={2} />
-    </div>
-  </div>
+                {/* Neck (pieza N) - Restaurando comportamiento original */}
+                <div className="relative group z-30 lightsaber-part flex items-end" style={{ width: '130px', height: '550px', marginLeft: '-10px', marginRight: '-16px' }}>
+                  {/* Parte superior (plano 2D), debajo de las otras piezas - SOLO EL 30% SUPERIOR */}
+                  <div className="absolute inset-0 z-0"
+                       style={{
+                         clipPath: 'inset(0% 11% 30%)',
+                         opacity: 1,
+                         zIndex: -1
+                       }}>
+                    <Image
+                      src={neckImage}
+                      alt="Neck 2D"
+                      fill
+                      className="object-contain"
+                      style={{ objectPosition: 'top' }}
+                      sizes="130px"
+                      draggable={false}
+                    />
+                  </div>
+                  {/* Parte inferior (vista real), por encima de las otras piezas - SOLO EL 70% INFERIOR */}
+                  <div className="absolute inset-0 z-10"
+                       style={{
+                         clipPath: 'inset(40% 0% 0%)',
+                         opacity: 1,
+                         zIndex: 50
+                       }}>
+                    <Image
+                      src={neckImage}
+                      alt="Neck Real"
+                      fill
+                      className="object-contain"
+                      style={{ objectPosition: 'bottom' }}
+                      sizes="130px"
+                      draggable={false}
+                    />
+                  </div>
+                  {/* Magnifier y hover - Por encima de todo para mostrar imagen completa */}
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto" style={{ zIndex: 60 }}>
+                    <MagnifierImage src={neckImage} width={130} height={550} zoom={2} />
+                  </div>
+                </div>
 
+                {/* Emitter */}
+                <div className="relative group z-10 lightsaber-part flex items-end" style={{ width: '240px', height: '550px', marginLeft: '-10px' }}>
+                  <Image
+                    src={emitterImage}
+                    alt="Emitter"
+                    fill
+                    className="object-contain"
+                    sizes="240px"
+                    style={{ objectPosition: 'bottom' }}
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
+                    <MagnifierImage src={emitterImage} width={240} height={550} zoom={2} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
-
-  
-
-  {/* Neck (pieza N) */}
-<div className="relative w-[25vw] max-w-[153px] h-[35vw] max-h-[670px] -ml-6 -mr-6 flex items-end">
-  {/* Parte superior (plano 2D), debajo de las otras piezas */}
-  <div className="absolute inset-0 z-0"
-       style={{
-         WebkitMaskImage: 'linear-gradient(#fafafa00 40%, #ffffff 0%, #ededed 100%))',
-         maskImage: 'linear-gradient(to bottom, black 0%, black 33%, transparent 66%, transparent 100%)'
-       }}>
-    <Image
-      src={neckImage}
-      alt="Neck 2D"
-      fill
-      className="object-contain"
-      style={{ objectPosition: 'top' }}
-      draggable={false}
-    />
-  </div>
-  {/* Parte inferior (vista real), por encima de las otras piezas */}
-  <div className="absolute inset-0 z-20"
-       style={{
-         maskImage: 'linear-gradient(to bottom, transparent 0%, transparent 33%, black 10%, black 0%)'
-       }}>
-    <Image
-      src={neckImage}
-      alt="Neck Real"
-      fill
-      className="object-contain"
-      style={{ objectPosition: 'top' }}
-      draggable={false}
-    />
-  </div>
-  {/* Magnifier y hover solo en la capa superior */}
-  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black bg-opacity-50 z-10">
-    <MagnifierImage src={neckImage} width={153} height={670} zoom={2} />
-  </div>
-</div>
-
-
-
-
-
-  {/* Emitter */}
-  <div className="relative group w-[25vw] max-w-[268px] h-[35vw] max-h-[670px]">
-    <Image
-      src={emitterImage}
-      alt="Emitter"
-      fill
-      className="object-contain"
-    />
-    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition bg-black bg-opacity-50">
-      <MagnifierImage src={emitterImage} width={268} height={670} zoom={2} />
-    </div>
-  </div>
-</div>
-</div>
-</div>
-
-        <aside className="w-[300px] bg-gray-800 p-4 rounded-xl shadow-md border border-gray-700 space-y-4">
+        <aside className="w-full lg:w-[320px] lg:flex-shrink-0 bg-gray-800 p-4 rounded-xl shadow-md border border-gray-700 space-y-4" style={{ maxHeight: '600px', overflowY: 'auto' }}>
           <PartPanel
             label="PUNTA TRASERA"
             short="P"
