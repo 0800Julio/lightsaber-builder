@@ -74,7 +74,7 @@ const PartPanel: React.FC<PartPanelProps> = ({
   };
 
   return (
-    <div className="border rounded-xl p-4 mb-4 bg-gray-900 shadow-lg">
+    <div className="border rounded-xl p-2 mb-2 bg-gray-800 shadow-lg border-gray-600">
       <div
         onClick={onToggle}
         role="button"
@@ -82,35 +82,35 @@ const PartPanel: React.FC<PartPanelProps> = ({
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') onToggle();
         }}
-        className="flex items-center gap-4 mb-4 cursor-pointer select-none focus:outline-none"
+        className="flex items-center gap-3 mb-2 cursor-pointer select-none focus:outline-none"
         aria-expanded={isOpen}
         aria-controls={`${type}-panel-content`}
       >
         {/* Ícono fijo de la pieza */}
-        <div className="relative w-16 h-16 flex-shrink-0">
+        <div className="relative w-12 h-12 flex-shrink-0">
           <Image
             src={imagePath}
             alt={`Ícono fijo de ${label}`}
             fill
-            className="object-contain rounded border border-gray-600"
+            className="object-contain rounded border border-gray-500"
           />
         </div>
 
         <div className="flex flex-col justify-center flex-grow">
-          <p className="text-lg font-bold text-white leading-tight">{label}</p>
-          <p className="text-sm text-gray-400">({type})</p>
+          <p className="text-base font-bold text-gray-100 leading-tight">{label}</p>
+          <p className="text-xs text-gray-300">({type})</p>
         </div>
 
         <div className="flex items-center">
-          {isOpen ? <ChevronUp /> : <ChevronDown />}
+          {isOpen ? <ChevronUp className="w-4 h-4 text-gray-300" /> : <ChevronDown className="w-4 h-4 text-gray-300" />}
         </div>
       </div>
 
       {isOpen && (
-        <div className="space-y-4">
+        <div className="space-y-2">
           {/* Vista previa solo si hay tipo seleccionado */}
           {selectedType && (
-            <div className="w-full h-48 relative bg-black rounded-md overflow-hidden">
+            <div className="w-full h-32 relative bg-gray-700 rounded-md overflow-hidden border border-gray-600">
               <Image
                 src={iconPath}
                 alt={`Vista previa de ${label}`}
@@ -122,16 +122,16 @@ const PartPanel: React.FC<PartPanelProps> = ({
 
           {/* Tipos */}
           <div>
-            <label className="text-white block mb-1">Seleccionar tipo:</label>
-            <div className="flex flex-wrap gap-2">
+            <label className="text-gray-100 block mb-1 text-sm">Seleccionar tipo:</label>
+            <div className="flex flex-wrap gap-1">
               {Object.keys(options).map((option) => (
                 <button
                   key={option}
                   onClick={() => handleTypeChange(option)}
-                  className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  className={`px-2 py-1 rounded-full text-xs font-medium transition-colors ${
                     selectedType === option
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-300 text-black'
+                      ? 'bg-gray-700 text-white shadow-md'
+                      : 'bg-gray-600 text-gray-100 hover:bg-gray-500'
                   }`}
                 >
                   {option}
@@ -143,16 +143,16 @@ const PartPanel: React.FC<PartPanelProps> = ({
           {/* Colores */}
           {selectedType && (
             <div>
-              <label className="text-white block mb-1">Seleccionar acabado:</label>
-              <div className="flex flex-wrap gap-2">
+              <label className="text-gray-100 block mb-1 text-sm">Seleccionar acabado:</label>
+              <div className="flex flex-wrap gap-1">
                 {Object.keys(options[selectedType]).map((color) => (
                   <button
                     key={color}
                     onClick={() => handleColorChange(color)}
-                    className={`w-8 h-8 rounded-full border-2 ${
+                    className={`w-6 h-6 rounded-full border-2 transition-all ${
                       selectedColor === color
-                        ? 'border-white'
-                        : 'border-gray-500'
+                        ? 'border-gray-100 shadow-md'
+                        : 'border-gray-400 hover:border-gray-300'
                     }`}
                     style={{ backgroundColor: mapColorToCSS(color) }}
                     title={color}
@@ -167,16 +167,16 @@ const PartPanel: React.FC<PartPanelProps> = ({
             selectedColor &&
             options[selectedType][selectedColor]?.length > 0 && (
               <div>
-                <label className="text-white block mb-1">Seleccionar textura:</label>
-                <div className="flex flex-wrap gap-2">
+                <label className="text-gray-100 block mb-1 text-sm">Seleccionar textura:</label>
+                <div className="flex flex-wrap gap-1">
                   {options[selectedType][selectedColor].map((finish) => (
                     <button
                       key={finish}
                       onClick={() => handleFinishChange(finish)}
-                      className={`px-3 py-1 rounded-full text-sm font-medium ${
+                      className={`px-2 py-1 rounded-full text-xs font-medium transition-colors ${
                         selectedFinish === finish
-                          ? 'bg-green-600 text-white'
-                          : 'bg-gray-300 text-black'
+                          ? 'bg-green-600 text-white shadow-md'
+                          : 'bg-gray-600 text-gray-100 hover:bg-gray-500'
                       }`}
                     >
                       {finish}
