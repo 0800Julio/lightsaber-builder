@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lightsaber Builder - Diseñador Virtual</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            color: white;
+            overflow-x: auto;
+            min-height: 100vh;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #000;
+            z-index: 50;
+            height: 72px;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header .logo {
+            height: 50px;
+            width: 50px;
+            margin-right: 24px;
+        }
+
+        .header nav {
+            display: flex;
+            gap: 24px;
+            margin: 0 auto;
+        }
+
+        .header a {
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .header a:hover {
+            color: #FF6F00;
+        }
+
+        .header a:hover::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #FF6F00;
+            box-shadow: 0 0 6px 2px rgba(255, 115, 0, 0.7);
+        }
+
+        .main-content {
+            padding-top: 88px;
+            padding: 88px 12px 12px;
+            min-height: 100vh;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #FF6F00;
+            text-shadow: 0 0 5px #FF6F00, 0 0 10px #FF6F00, 0 0 20px #FF6F00;
+            animation: neonGlow 2.5s ease-in-out infinite alternate;
+        }
+
+        @keyframes neonGlow {
+            from { text-shadow: 0 0 5px #FF6F00, 0 0 10px #FF6F00, 0 0 20px #FF6F00; }
+            to { text-shadow: 0 0 5px #FF6F00, 0 0 10px #FF6F00, 0 0 20px #FF6F00, 0 0 40px #FF6F00; }
+        }
+
+        .container {
+            display: flex;
+            gap: 24px;
+            height: calc(100vh - 140px);
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .lightsaber-viewer {
+            flex: 1;
+            background: white;
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 550px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .lightsaber-container {
+            width: 100%;
+            max-width: none;
+            height: 500px;
+            display: flex;
+            align-items: end;
+            justify-content: center;
+            position: relative;
+            overflow: visible;
+        }
+
+        .lightsaber-part {
+            position: relative;
+            height: 500px;
+            display: flex;
+            align-items: end;
+        }
+
+        .lightsaber-part img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: bottom;
+            image-rendering: crisp-edges;
+        }
+
+        .part-hover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .lightsaber-part:hover .part-hover {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .magnifier {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid #00ffff;
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.8),
+                inset 0 0 20px rgba(0, 255, 255, 0.3);
+            background-repeat: no-repeat;
+            position: absolute;
+            pointer-events: none;
+            z-index: 1000;
+            display: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .controls-panel {
+            width: 350px;
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 12px;
+            max-height: 550px;
+            overflow-y: auto;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .part-panel {
+            border: 1px solid #444;
+            border-radius: 12px;
+            padding: 8px;
+            margin-bottom: 12px;
+            background: #2a2a2a;
+        }
+
+        .part-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        .part-header:hover {
+            background: #333;
+        }
+
+        .part-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 4px;
+            border: 1px solid #555;
+        }
+
+        .part-info {
+            flex: 1;
+        }
+
+        .part-label {
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .part-chevron {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s;
+        }
+
+        .part-chevron.open {
+            transform: rotate(180deg);
+        }
+
+        .part-options {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .part-options.open {
+            max-height: 750px;
+            padding-top: 12px;
+        }
+
+        .option-group {
+            margin-bottom: 12px;
+        }
+
+        .option-label {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #ccc;
+        }
+
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 8px;
+        }
+
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(35px, 1fr));
+            gap: 6px;
+        }
+
+        .option-button {
+            padding: 8px 12px;
+            border: 1px solid #555;
+            border-radius: 6px;
+            background: #333;
+            color: white;
+            cursor: pointer;
+            text-align: center;
+            font-size: 12px;
+            transition: all 0.3s;
+        }
+
+        .option-button:hover {
+            background: #444;
+            border-color: #FF6F00;
+        }
+
+        .option-button.selected {
+            background: #FF6F00;
+            border-color: #FF6F00;
+            color: white;
+        }
+
+        .color-button {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid #555;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 10px;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .color-button:hover {
+            border-color: #FF6F00;
+            transform: scale(1.15);
+            box-shadow: 0 0 10px rgba(255, 111, 0, 0.5);
+        }
+
+        .color-button.selected {
+            border-color: #FF6F00;
+            box-shadow: 0 0 15px rgba(255, 111, 0, 0.8);
+            transform: scale(1.1);
+            border-width: 3px;
+        }
+
+        .color-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+            pointer-events: none;
+            border-radius: 50%;
+        }
+
+        .part-preview {
+            margin-bottom: 16px;
+            padding: 12px;
+            background: #333;
+            border-radius: 8px;
+            border: 1px solid #555;
+        }
+
+        .preview-label {
+            font-size: 12px;
+            color: #ccc;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .preview-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 120px;
+            background: #222;
+            border-radius: 6px;
+            border: 1px solid #444;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .controls-panel {
+                width: 100%;
+                max-height: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <img src="images/icons/logo.JPG" alt="Logo" class="logo">
+        <nav>
+            <a href="#materiales">Materiales de la Empuñadura</a>
+            <a href="#incluye">Que incluye</a>
+            <a href="#instrucciones">Instrucciones de Uso</a>
+            <a href="#worldwide">World Wide Orders</a>
+            <a href="#galeria">Galeria de Fotos</a>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <h1 class="title">Diseñador virtual de Lightsabers</h1>
+        
+        <div class="container">
+            <div class="lightsaber-viewer">
+                <div class="lightsaber-container" id="lightsaberContainer">
+                    <!-- Pommel -->
+                    <div class="lightsaber-part" style="width: 130px; margin-right: -4px;" id="pommel">
+                        <img src="images/pommel/standard.jpg" alt="Pommel" id="pommelImg">
+                        <div class="part-hover">
+                            <div class="magnifier" id="pommelMagnifier"></div>
+                        </div>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="lightsaber-part" style="width: 340px; margin-left: -10px; margin-right: -10px; z-index: 10;" id="body">
+                        <img src="images/body/standard.jpg" alt="Body" id="bodyImg">
+                        <div class="part-hover">
+                            <div class="magnifier" id="bodyMagnifier"></div>
+                        </div>
+                    </div>
+
+                    <!-- Neck -->
+                    <div class="lightsaber-part" style="width: 115px; margin-left: -10px; margin-right: -16px; z-index: 30;" id="neck">
+                        <!-- Parte superior (2D) -->
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; clip-path: inset(0% 11% 30% 0%);">
+                            <img src="images/neck/standard.jpg" alt="Neck 2D" style="width: 100%; height: 100%; object-fit: contain; object-position: top;">
+                        </div>
+                        <!-- Parte inferior (Real) -->
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 50; clip-path: inset(40% 0% 0%);">
+                            <img src="images/neck/standard.jpg" alt="Neck Real" id="neckImg" style="width: 100%; height: 100%; object-fit: contain; object-position: bottom;">
+                        </div>
+                        <div class="part-hover" style="z-index: 60;">
+                            <div class="magnifier" id="neckMagnifier"></div>
+                        </div>
+                    </div>
+
+                    <!-- Emitter -->
+                    <div class="lightsaber-part" style="width: 220px; margin-left: -10px; z-index: 10;" id="emitter">
+                        <img src="images/emitter/standard.jpg" alt="Emitter" id="emitterImg">
+                        <div class="part-hover">
+                            <div class="magnifier" id="emitterMagnifier"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <aside class="controls-panel">
+                <!-- Pommel Panel -->
+                <div class="part-panel">
+                    <div class="part-header" onclick="togglePanel('pommel')">
+                        <img src="images/icons/ICONO_P.JPG" alt="Pommel" class="part-icon">
+                        <div class="part-info">
+                            <div class="part-label">PUNTA TRASERA</div>
+                        </div>
+                        <svg class="part-chevron" id="pommelChevron" viewBox="0 0 24 24" fill="white">
+                            <path d="M7 10l5 5 5-5z"/>
+                        </svg>
+                    </div>
+                    <div class="part-options" id="pommelOptions">
+                        <div class="part-preview" id="pommelPreview" style="display: none;">
+                            <div class="preview-label">Vista previa:</div>
+                            <div class="preview-container">
+                                <img id="pommelPreviewImg" alt="Preview" class="preview-image">
+                            </div>
+                        </div>
+                        <div class="option-group">
+                            <div class="option-label">Tipos:</div>
+                            <div class="option-grid" id="pommelTypes"></div>
+                        </div>
+                        <div class="option-group">
+                            <div class="option-label">Colores:</div>
+                            <div class="option-grid" id="pommelColors"></div>
+                        </div>
+                        <div class="option-group">
+                            <div class="option-label">Acabados:</div>
+                            <div class="option-grid" id="pommelFinishes"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Body Panel -->
+                <div class="part-panel">
+                    <div class="part-header" onclick="togglePanel('body')">
+                        <img src="images/icons/ICONO_B.JPG" alt="Body" class="part-icon">
+                        <div class="part-info">
+                            <div class="part-label">CUERPO</div>
+                        </div>
+                        <svg class="part-chevron" id="bodyChevron" viewBox="0 0 24 24" fill="white">
+                            <path d="M7 10l5 5 5-5z"/>
+                        </svg>
+                    </div>
+                    <div class="part-options" id="bodyOptions">
+                        <div class="part-preview" id="bodyPreview" style="display: none;">
+                            <div class="preview-label">Vista previa:</div>
+                            <div class="preview-container">
+                                <img id="bodyPreviewImg" alt="Preview" class="preview-image">
+                            </div>
+                        </div>
+                        <div class="option-group">
+                            <div class="option-label">Tipos:</div>
+                            <div class="option-grid" id="bodyTypes"></div>
+                        </div>
+                        <div class="option-group">
+                            <div class="option-label">Colores:</div>
+                            <div class="option-grid" id="bodyColors"></div>
+                        </div>
+                        <div class="option-group">
+                            <div class="option-label">Acabados:</div>
+                            <div class="option-grid" id="bodyFinishes"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Neck Panel -->
+                <div class="part-panel">
+                    <div class="part-header" onclick="togglePanel('neck')">
+                        <img src="images/icons/ICONO_N.JPG" alt="Neck" class="part-icon">
+                        <div class="part-info">
+                            <div class="part-label">CUELLO</div>
+                        </div>
+                        <svg class="part-chevron" id="neckChevron" viewBox="0 0 24 24" fill="white">
+                            <path d="M7 10l5 5 5-5z"/>
+                        </svg>
+                    </div>
+                    <div class="part-options" id="neckOptions">
+                        <div class="part-preview" id="neckPreview" style="display: none;">
+                            <div class="preview-label">Vista previa:</div>
+                            <div class="preview-container">
+                                <img id="neckPreviewImg" alt="Preview" class="preview-image">
+                            </div>
+                        </div>
+                        <div class="option-group">
+                            <div class="option-label">Tipos:</div>
+                            <div class="option-grid" id="neckTypes"></div>
+                        </div>
+                        <div class="option-group">
+                            <div class="option-label">Colores:</div>
+                            <div class="option-grid" id="neckColors"></div>
+                        </div>
+                        <div class="option-group">
+                            <div class="option-label">Acabados:</div>
+                            <div class="option-grid" id="neckFinishes"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Emitter Panel -->
+                <div class="part-panel">
+                    <div class="part-header" onclick="togglePanel('emitter')">
+                        <img src="images/icons/ICONO_E.JPG" alt="Emitter" class="part-icon">
+                        <div class="part-info">
+                            <div class="part-label">PICO</div>
+                        </div>
+                        <svg class="part-chevron" id="emitterChevron" viewBox="0 0 24 24" fill="white">
+                            <path d="M7 10l5 5 5-5z"/>
+                        </svg>
+                    </div>
+                    <div class="part-options" id="emitterOptions">
+                        <div class="part-preview" id="emitterPreview" style="display: none;">
+                            <div class="preview-label">Vista previa:</div>
+                            <div class="preview-container">
+                                <img id="emitterPreviewImg" alt="Preview" class="preview-image">
+                            </div>
+                        </div>
+                        <div class="option-group">
+                            <div class="option-label">Tipos:</div>
+                            <div class="option-grid" id="emitterTypes"></div>
+                        </div>
+                        <div class="option-group">
+                            <div class="option-label">Colores:</div>
+                            <div class="option-grid" id="emitterColors"></div>
+                        </div>
+                        <div class="option-group">
+                            <div class="option-label">Acabados:</div>
+                            <div class="option-grid" id="emitterFinishes"></div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <script>
+        // Configuración de datos
+        const partData = {
+            pommel: {
+                'P-1': { 'gris': ['texturado'], 'negro': ['texturado'], 'amarillo': [], 'azul': [], 'pulido': [], 'rojo': [], 'standard': [] },
+                'P-2': { 'gris': ['texturado'], 'negro': ['texturado'], 'amarillo': [], 'azul': [], 'pulido': [], 'rojo': [], 'standard': [] },
+                'P-3': { 'gris': ['texturado'], 'negro': ['texturado'], 'amarillo': [], 'azul': [], 'pulido': [], 'rojo': [], 'standard': [] },
+                'P-4': { 'gris': ['texturado'], 'negro': ['texturado'], 'amarillo': [], 'azul': [], 'pulido': [], 'rojo': [], 'standard': [] },
+                'P-5': { 'gris': ['texturado'], 'negro': ['texturado'], 'amarillo': [], 'azul': [], 'pulido': [], 'rojo': [], 'standard': [] },
+                'P-6': { 'gris': ['texturado'], 'negro': ['texturado'], 'amarillo': [], 'azul': [], 'pulido': [], 'rojo': [], 'standard': [] },
+                'P-7': { 'gris': ['texturado'], 'negro': ['texturado'], 'amarillo': [], 'azul': [], 'pulido': [], 'rojo': [], 'standard': [] },
+                'P-8': { 'gris': ['texturado'], 'negro': ['texturado'], 'amarillo': [], 'azul': [], 'pulido': [], 'rojo': [], 'standard': [] },
+                'P-9': { 'gris': ['texturado'], 'negro': ['texturado'], 'amarillo': [], 'azul': [], 'pulido': [], 'rojo': [], 'standard': [] },
+                'P-10': { 'gris': ['texturado'], 'negro': ['texturado'], 'amarillo': [], 'azul': [], 'pulido': [], 'rojo': [], 'standard': [] },
+                'P-11': { 'gris': ['texturado'], 'negro': ['texturado'], 'amarillo': [], 'azul': [], 'pulido': [], 'rojo': [], 'standard': [] },
+                'P-12': { 'gris': ['texturado'], 'negro': ['texturado'], 'amarillo': [], 'azul': [], 'pulido': [], 'rojo': [], 'standard': [] },
+                'P-13': { 'gris': ['texturado'], 'negro': ['texturado'], 'amarillo': [], 'azul': [], 'pulido': [], 'rojo': [], 'standard': [] }
+            },
+            body: {
+                'B-1 cuero blanco ancho': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'B-1 cuero marron ancho': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'B-1 cuero marron fino': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'B-1 cuero negro fino': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'B-1 cuero verde ancho': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'B-2': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'B-3': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'B-4': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'B-5': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'B-6': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'B-7': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'B-8': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'B-9': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'B-10': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'B-11': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] }
+            },
+            neck: {
+                'N-1': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'N-2': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'N-3': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'N-4': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'N-5': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'N-6': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'N-7': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'N-8': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'N-9': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'N-10': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'N-11': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'N-12': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'N-13': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] }
+            },
+            emitter: {
+                'E-1': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'E-2': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'E-3': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'E-4': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'E-5': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'E-6': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'E-7': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'E-8': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'E-9': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'E-10': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'E-11-4': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'E-11-5': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'E-11-6': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'E-12-1': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'E-12-2': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'E-12-3': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] },
+                'E-13-3': { 'amarillo': [], 'azul': [], 'blanco': [], 'gris': ['texturado', 'satinado'], 'negro': ['texturado', 'satinado'], 'pulido': [], 'rojo': [] }
+            }
+        };
+
+        // Configuración de márgenes para piezas N
+        const neckMarginConfig = {
+            'standard': { marginLeft: '-10px', marginRight: '-16px' },
+            'N-1': { marginLeft: '-12px', marginRight: '-15px' },
+    'N-2': { marginLeft: '-17px', marginRight: '-22px' },
+    'N-3': { marginLeft: '-15px', marginRight: '-23px' },
+    'N-4': { marginLeft: '-17px', marginRight: '-25px' },
+    'N-5': { marginLeft: '-14px', marginRight: '-20px' },
+    'N-6': { marginLeft: '-12px', marginRight: '-20px' },
+    'N-7': { marginLeft: '-18px', marginRight: '-26px' },
+    'N-8': { marginLeft: '-5px', marginRight: '-11px' },
+    'N-9': { marginLeft: '-14px', marginRight: '-24px' },
+    'N-10': { marginLeft: '-10px', marginRight: '-16px' },
+    'N-11': { marginLeft: '-13px', marginRight: '-22px' },
+    'N-12': { marginLeft: '-25px', marginRight: '-32px' },
+    'N-13': { marginLeft: '-26px', marginRight: '-31px' },
+        };
+
+        // Configuración de clip-path para piezas N
+        const neckClipPathConfig = {
+            'standard': { top: '0%', right: '11%', bottom: '30%', left: '0%' },
+            'N-1': { top: '0%', right: '12%', bottom: '30%', left: '12%' },
+    'N-2': { top: '0%', right: '17%', bottom: '30%', left: '16%' },
+    'N-3': { top: '0%', right: '18%', bottom: '30%', left: '18%' },
+    'N-4': { top: '0%', right: '20%', bottom: '30%', left: '20%' },
+    'N-5': { top: '0%', right: '15%', bottom: '30%', left: '17%' },
+    'N-6': { top: '0%', right: '17%', bottom: '30%', left: '15%' },
+    'N-7': { top: '0%', right: '20%', bottom: '30%', left: '20%' },
+    'N-8': { top: '0%', right: '10%', bottom: '30%', left: '8%' },
+    'N-9': { top: '0%', right: '21%', bottom: '30%', left: '18%' },
+    'N-10': { top: '0%', right: '11%', bottom: '30%', left: '6%' },
+    'N-11': { top: '0%', right: '18%', bottom: '30%', left: '17%' },
+    'N-12': { top: '0%', right: '26%', bottom: '30%', left: '26%' },
+    'N-13': { top: '0%', right: '27%', bottom: '30%', left: '27%' },
+        };
+
+        const colorMap = {
+            'rojo': '#ff0000',
+            'azul': '#0000ff',
+            'verde': '#00ff00',
+            'negro': '#333333',
+            'blanco': '#ffffff',
+            'amarillo': '#ffff00',
+            'gris': '#808080',
+            'pulido': '#c0c0c0',
+            'standard': '#888888'
+        };
+
+        let currentSelections = {
+            pommel: { type: null, color: 'standard', finish: null },
+            body: { type: null, color: 'standard', finish: null },
+            neck: { type: null, color: 'standard', finish: null },
+            emitter: { type: null, color: 'standard', finish: null }
+        };
+
+        let currentNeckType = 'standard';
+
+        // Funciones principales
+        function togglePanel(partType) {
+            const panel = document.getElementById(partType + 'Options');
+            const chevron = document.getElementById(partType + 'Chevron');
+            
+            // Cerrar otros paneles
+            ['pommel', 'body', 'neck', 'emitter'].forEach(part => {
+                if (part !== partType) {
+                    document.getElementById(part + 'Options').classList.remove('open');
+                    document.getElementById(part + 'Chevron').classList.remove('open');
+                }
+            });
+            
+            panel.classList.toggle('open');
+            chevron.classList.toggle('open');
+            
+            if (panel.classList.contains('open')) {
+                populateOptions(partType);
+            }
+        }
+
+        function populateOptions(partType) {
+            const data = partData[partType];
+            if (!data) return;
+
+            // Poblar tipos
+            const typesContainer = document.getElementById(partType + 'Types');
+            typesContainer.innerHTML = '';
+            Object.keys(data).forEach(type => {
+                const button = document.createElement('div');
+                button.className = 'option-button';
+                button.textContent = type;
+                button.onclick = () => selectType(partType, type);
+                typesContainer.appendChild(button);
+            });
+
+            // Limpiar colores y acabados
+            document.getElementById(partType + 'Colors').innerHTML = '';
+            document.getElementById(partType + 'Finishes').innerHTML = '';
+        }
+
+        function selectType(partType, type) {
+            currentSelections[partType].type = type;
+            currentSelections[partType].color = 'standard';
+            currentSelections[partType].finish = null;
+
+            // Actualizar botones de tipo
+            document.querySelectorAll(`#${partType}Types .option-button`).forEach(btn => {
+                btn.classList.remove('selected');
+                if (btn.textContent === type) btn.classList.add('selected');
+            });
+
+            // Poblar colores
+            const data = partData[partType][type];
+            const colorsContainer = document.getElementById(partType + 'Colors');
+            colorsContainer.innerHTML = '';
+            colorsContainer.className = 'color-grid'; // Usar clase específica para colores
+            
+            Object.keys(data).forEach(color => {
+                const button = document.createElement('div');
+                button.className = 'color-button';
+                button.style.backgroundColor = colorMap[color] || '#888888';
+                button.title = color.charAt(0).toUpperCase() + color.slice(1);
+                button.textContent = color.charAt(0).toUpperCase();
+                
+                // Ajustar color del texto para mejor contraste
+                if (color === 'blanco' || color === 'amarillo' || color === 'pulido') {
+                    button.style.color = '#333';
+                    button.style.textShadow = '1px 1px 2px rgba(255,255,255,0.8)';
+                }
+                
+                button.onclick = () => selectColor(partType, color);
+                colorsContainer.appendChild(button);
+            });
+
+            // Actualizar preview de la pieza en el icono del panel
+            updatePartPreview(partType, type);
+
+            updateImage(partType);
+            
+            if (partType === 'neck') {
+                currentNeckType = type;
+                updateNeckStyles();
+            }
+        }
+
+        function selectColor(partType, color) {
+            currentSelections[partType].color = color;
+            currentSelections[partType].finish = 'standard';
+
+            // Actualizar botones de color
+            document.querySelectorAll(`#${partType}Colors .color-button`).forEach(btn => {
+                btn.classList.remove('selected');
+                if (btn.title.toLowerCase() === color.toLowerCase()) {
+                    btn.classList.add('selected');
+                }
+            });
+
+            // Poblar acabados
+            const data = partData[partType][currentSelections[partType].type][color];
+            const finishesContainer = document.getElementById(partType + 'Finishes');
+            finishesContainer.innerHTML = '';
+            
+            data.forEach(finish => {
+                const button = document.createElement('div');
+                button.className = 'option-button';
+                button.textContent = finish.charAt(0).toUpperCase() + finish.slice(1);
+                button.onclick = () => selectFinish(partType, finish);
+                finishesContainer.appendChild(button);
+            });
+
+            updateImage(partType);
+        }
+
+        function selectFinish(partType, finish) {
+            currentSelections[partType].finish = finish;
+
+            // Actualizar botones de acabado
+            document.querySelectorAll(`#${partType}Finishes .option-button`).forEach(btn => {
+                btn.classList.remove('selected');
+                if (btn.textContent.toLowerCase() === finish.toLowerCase()) {
+                    btn.classList.add('selected');
+                }
+            });
+
+            updateImage(partType);
+        }
+
+        function updateImage(partType) {
+            const selection = currentSelections[partType];
+            if (!selection.type) return;
+
+            const color = selection.color || 'standard';
+            const finish = selection.finish || '';
+            
+            let fileName;
+            if (finish && finish !== 'standard') {
+                fileName = `${selection.type} ${color} ${finish}.JPG`;
+            } else {
+                fileName = `${selection.type} ${color}.JPG`;
+            }
+            
+            const imagePath = `images/${partType}/${selection.type}/${fileName}`;
+
+            const img = document.getElementById(partType + 'Img');
+            if (img) {
+                img.src = imagePath;
+                
+                // Manejar error de imagen no encontrada
+                img.onerror = function() {
+                    // Intentar sin acabado si había uno
+                    if (finish && finish !== 'standard') {
+                        const fallbackFileName = `${selection.type} ${color}.JPG`;
+                        const fallbackPath = `images/${partType}/${selection.type}/${fallbackFileName}`;
+                        this.src = fallbackPath;
+                    }
+                };
+            }
+
+            // Para neck, actualizar ambas imágenes
+            if (partType === 'neck') {
+                const neckContainer = document.getElementById('neck');
+                const topImg = neckContainer.querySelector('div:first-child img');
+                if (topImg) {
+                    topImg.src = imagePath;
+                    topImg.onerror = function() {
+                        if (finish && finish !== 'standard') {
+                            const fallbackFileName = `${selection.type} ${color}.JPG`;
+                            const fallbackPath = `images/${partType}/${selection.type}/${fallbackFileName}`;
+                            this.src = fallbackPath;
+                        }
+                    };
+                }
+            }
+        }
+
+        function updateNeckStyles() {
+            const neckContainer = document.getElementById('neck');
+            const margins = neckMarginConfig[currentNeckType] || neckMarginConfig['standard'];
+            const clipConfig = neckClipPathConfig[currentNeckType] || neckClipPathConfig['standard'];
+            
+            neckContainer.style.marginLeft = margins.marginLeft;
+            neckContainer.style.marginRight = margins.marginRight;
+            
+            const topLayer = neckContainer.querySelector('div:first-child');
+            if (topLayer) {
+                topLayer.style.clipPath = `inset(${clipConfig.top} ${clipConfig.right} ${clipConfig.bottom} ${clipConfig.left})`;
+            }
+        }
+
+        function updatePartPreview(partType, type) {
+            // Mostrar el preview de la pieza seleccionada
+            const previewContainer = document.getElementById(partType + 'Preview');
+            const previewImg = document.getElementById(partType + 'PreviewImg');
+            
+            if (previewContainer && previewImg && type && type !== 'standard') {
+                // Mostrar el contenedor de preview
+                previewContainer.style.display = 'block';
+                
+                // Usar la misma lógica que el page.tsx: `images/${partType}/${type}/${type}.JPG`
+                const previewPath = `images/${partType}/${type}/${type}.JPG`;
+                previewImg.src = previewPath;
+                previewImg.onerror = function() {
+                    // Si falla, intentar con standard
+                    const fallbackPath = `images/${partType}/${type}/${type} standard.JPG`;
+                    this.src = fallbackPath;
+                    this.onerror = function() {
+                        // Si tampoco existe, intentar con la primera disponible
+                        const colors = Object.keys(partData[partType][type]);
+                        if (colors.length > 0) {
+                            const firstColor = colors[0];
+                            const fallbackPath2 = `images/${partType}/${type}/${type} ${firstColor}.JPG`;
+                            this.src = fallbackPath2;
+                            this.onerror = function() {
+                                // Si tampoco existe, ocultar el preview
+                                previewContainer.style.display = 'none';
+                            };
+                        }
+                    };
+                };
+            } else if (previewContainer) {
+                // Ocultar el preview si no hay tipo seleccionado
+                previewContainer.style.display = 'none';
+            }
+        }
+
+        // Configurar efectos de magnificación mejorados
+        function setupMagnifier() {
+            ['pommel', 'body', 'neck', 'emitter'].forEach(partType => {
+                const part = document.getElementById(partType);
+                const magnifier = document.getElementById(partType + 'Magnifier');
+                const img = document.getElementById(partType + 'Img');
+                
+                part.addEventListener('mouseenter', () => {
+                    magnifier.style.display = 'block';
+                });
+                
+                part.addEventListener('mousemove', (e) => {
+                    const rect = part.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    // Posicionar la lupa
+                    magnifier.style.left = (x - 75) + 'px';
+                    magnifier.style.top = (y - 75) + 'px';
+                    magnifier.style.display = 'block';
+                    
+                    // Calcular zoom y posición del fondo
+                    const zoomLevel = 2.5;
+                    const bgX = -(x * zoomLevel - 75);
+                    const bgY = -(y * zoomLevel - 75);
+                    
+                    magnifier.style.backgroundImage = `url(${img.src})`;
+                    magnifier.style.backgroundSize = `${rect.width * zoomLevel}px ${rect.height * zoomLevel}px`;
+                    magnifier.style.backgroundPosition = `${bgX}px ${bgY}px`;
+                });
+                
+                part.addEventListener('mouseleave', () => {
+                    magnifier.style.display = 'none';
+                });
+            });
+        }
+
+        // Inicializar la aplicación
+        function init() {
+            setupMagnifier();
+            
+            // Abrir panel de cuerpo por defecto
+            togglePanel('body');
+        }
+
+        // Ejecutar cuando la página cargue
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
