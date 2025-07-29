@@ -30,10 +30,16 @@ export default function MagnifierImage({
       }
     };
 
+    // Pequeño delay para asegurar que la imagen se haya cargado
+    const timer = setTimeout(updateSize, 100);
+    
     updateSize();
     window.addEventListener('resize', updateSize);
-    return () => window.removeEventListener('resize', updateSize);
-  }, [src]);
+    return () => {
+      window.removeEventListener('resize', updateSize);
+      clearTimeout(timer);
+    };
+  }, [src]); // Añadido src como dependencia
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (!containerRef.current) return;
@@ -61,15 +67,26 @@ export default function MagnifierImage({
         overflow: 'hidden',
         cursor: 'none',
         backgroundColor: 'transparent',
+        pointerEvents: 'auto',
       }}
       onMouseEnter={() => setShowMagnifier(true)}
       onMouseLeave={() => setShowMagnifier(false)}
       onMouseMove={handleMouseMove}
     >
+      {/* Imagen invisible solo para obtener dimensiones y detectar hover */}
       <img
         ref={imgRef}
         src={src}
         alt="zoom"
+        onLoad={() => {
+          if (imgRef.current) {
+            const imgRect = imgRef.current.getBoundingClientRect();
+            setImgSize({ 
+              width: imgRect.width, 
+              height: imgRect.height 
+            });
+          }
+        }}
         style={{
           width: '100%',
           height: '100%',
@@ -81,7 +98,10 @@ export default function MagnifierImage({
           pointerEvents: 'none',
           backgroundColor: 'transparent',
           imageRendering: 'auto',
-          filter: 'contrast(1.05) saturate(1.1)',
+          opacity: 0, // Hacer la imagen invisible
+          position: 'absolute',
+          top: 0,
+          left: 0,
         }}
         loading="eager"
         decoding="sync"

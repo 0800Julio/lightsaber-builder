@@ -703,7 +703,7 @@ export default function Crear() {
                     unoptimized={false}
                   />
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
-                    <MagnifierImage src={pommelImage} width={130} height={500} zoom={2} />
+                    <MagnifierImage key={pommelImage} src={pommelImage} width={130} height={500} zoom={2} />
                   </div>
                 </div>
 
@@ -721,7 +721,7 @@ export default function Crear() {
                     unoptimized={false}
                   />
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-40 pointer-events-none group-hover:pointer-events-auto">
-                    <MagnifierImage src={bodyImage} width={340} height={500} zoom={2} />
+                    <MagnifierImage key={bodyImage} src={bodyImage} width={340} height={500} zoom={2} />
                   </div>
                 </div>
 
@@ -774,7 +774,7 @@ export default function Crear() {
                   </div>
                   {/* Magnifier y hover - Por encima de todo para mostrar imagen completa */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto" style={{ zIndex: 60 }}>
-                    <MagnifierImage src={neckImage} width={115} height={500} zoom={2} />
+                    <MagnifierImage key={neckImage} src={neckImage} width={115} height={500} zoom={2} />
                   </div>
                 </div>
 
@@ -792,7 +792,7 @@ export default function Crear() {
                     unoptimized={false}
                   />
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
-                    <MagnifierImage src={emitterImage} width={220} height={500} zoom={2} />
+                    <MagnifierImage key={emitterImage} src={emitterImage} width={220} height={500} zoom={2} />
                   </div>
                 </div>
               </div>
