@@ -24,17 +24,17 @@ export default function Crear() {
     'standard': { marginLeft: '-10px', marginRight: '-16px' },
     'N-1': { marginLeft: '-12px', marginRight: '-15px' },
     'N-2': { marginLeft: '-17px', marginRight: '-22px' },
-    'N-3': { marginLeft: '-6px', marginRight: '-12px' },
-    'N-4': { marginLeft: '-10px', marginRight: '-16px' },
+    'N-3': { marginLeft: '-15px', marginRight: '-23px' },
+    'N-4': { marginLeft: '-17px', marginRight: '-25px' },
     'N-5': { marginLeft: '-14px', marginRight: '-20px' },
-    'N-6': { marginLeft: '-8px', marginRight: '-14px' },
-    'N-7': { marginLeft: '-10px', marginRight: '-16px' },
-    'N-8': { marginLeft: '-12px', marginRight: '-18px' },
-    'N-9': { marginLeft: '-8px', marginRight: '-14px' },
+    'N-6': { marginLeft: '-12px', marginRight: '-20px' },
+    'N-7': { marginLeft: '-18px', marginRight: '-26px' },
+    'N-8': { marginLeft: '-5px', marginRight: '-11px' },
+    'N-9': { marginLeft: '-14px', marginRight: '-24px' },
     'N-10': { marginLeft: '-10px', marginRight: '-16px' },
-    'N-11': { marginLeft: '-6px', marginRight: '-12px' },
-    'N-12': { marginLeft: '-14px', marginRight: '-20px' },
-    'N-13': { marginLeft: '-10px', marginRight: '-16px' },
+    'N-11': { marginLeft: '-13px', marginRight: '-22px' },
+    'N-12': { marginLeft: '-25px', marginRight: '-32px' },
+    'N-13': { marginLeft: '-26px', marginRight: '-31px' },
   };
 
   // Configuración de clip-path específicos para cada pieza N (parte superior)
@@ -42,17 +42,17 @@ export default function Crear() {
     'standard': { top: '0%', right: '11%', bottom: '30%', left: '0%' },
     'N-1': { top: '0%', right: '12%', bottom: '30%', left: '12%' },
     'N-2': { top: '0%', right: '17%', bottom: '30%', left: '16%' },
-    'N-3': { top: '0%', right: '5%', bottom: '30%', left: '0%' },
-    'N-4': { top: '0%', right: '11%', bottom: '30%', left: '0%' },
-    'N-5': { top: '0%', right: '22%', bottom: '30%', left: '0%' },
-    'N-6': { top: '0%', right: '8%', bottom: '30%', left: '0%' },
-    'N-7': { top: '0%', right: '11%', bottom: '30%', left: '0%' },
-    'N-8': { top: '0%', right: '15%', bottom: '30%', left: '0%' },
-    'N-9': { top: '0%', right: '8%', bottom: '30%', left: '0%' },
-    'N-10': { top: '0%', right: '11%', bottom: '30%', left: '0%' },
-    'N-11': { top: '0%', right: '5%', bottom: '30%', left: '0%' },
-    'N-12': { top: '0%', right: '22%', bottom: '30%', left: '0%' },
-    'N-13': { top: '0%', right: '11%', bottom: '30%', left: '0%' },
+    'N-3': { top: '0%', right: '18%', bottom: '30%', left: '18%' },
+    'N-4': { top: '0%', right: '20%', bottom: '30%', left: '20%' },
+    'N-5': { top: '0%', right: '15%', bottom: '30%', left: '17%' },
+    'N-6': { top: '0%', right: '17%', bottom: '30%', left: '15%' },
+    'N-7': { top: '0%', right: '20%', bottom: '30%', left: '20%' },
+    'N-8': { top: '0%', right: '10%', bottom: '30%', left: '8%' },
+    'N-9': { top: '0%', right: '21%', bottom: '30%', left: '18%' },
+    'N-10': { top: '0%', right: '11%', bottom: '30%', left: '6%' },
+    'N-11': { top: '0%', right: '18%', bottom: '30%', left: '17%' },
+    'N-12': { top: '0%', right: '26%', bottom: '30%', left: '26%' },
+    'N-13': { top: '0%', right: '27%', bottom: '30%', left: '27%' },
   };
 
   const pommelOptions = {
@@ -697,16 +697,13 @@ export default function Crear() {
                     fill
                     className="object-contain"
                     sizes="130px"
-                    style={{ 
-                      objectPosition: 'bottom',
-                      imageRendering: 'crisp-edges'
-                    }}
-                    quality={100}
+                    style={{ objectPosition: 'bottom' }}
+                    quality={95}
                     priority={true}
-                    unoptimized={true}
+                    unoptimized={false}
                   />
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
-                    <MagnifierImage src={pommelImage} width={130} height={500} zoom={2} />
+                    <MagnifierImage key={pommelImage} src={pommelImage} width={130} height={500} zoom={2} />
                   </div>
                 </div>
 
@@ -718,16 +715,13 @@ export default function Crear() {
                     fill
                     className="object-contain"
                     sizes="340px"
-                    style={{ 
-                      objectPosition: 'bottom',
-                      imageRendering: 'crisp-edges'
-                    }}
-                    quality={100}
+                    style={{ objectPosition: 'bottom' }}
+                    quality={95}
                     priority={true}
-                    unoptimized={true}
+                    unoptimized={false}
                   />
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-40 pointer-events-none group-hover:pointer-events-auto">
-                    <MagnifierImage src={bodyImage} width={340} height={500} zoom={2} />
+                    <MagnifierImage key={bodyImage} src={bodyImage} width={340} height={500} zoom={2} />
                   </div>
                 </div>
 
@@ -750,15 +744,12 @@ export default function Crear() {
                       alt="Neck 2D"
                       fill
                       className="object-contain"
-                      style={{ 
-                        objectPosition: 'top',
-                        imageRendering: 'crisp-edges'
-                      }}
+                      style={{ objectPosition: 'top' }}
                       sizes="115px"
                       draggable={false}
-                      quality={100}
+                      quality={95}
                       priority={true}
-                      unoptimized={true}
+                      unoptimized={false}
                     />
                   </div>
                   {/* Parte inferior (vista real), por encima de las otras piezas - SOLO EL 70% INFERIOR */}
@@ -773,20 +764,17 @@ export default function Crear() {
                       alt="Neck Real"
                       fill
                       className="object-contain"
-                      style={{ 
-                        objectPosition: 'bottom',
-                        imageRendering: 'crisp-edges'
-                      }}
+                      style={{ objectPosition: 'bottom' }}
                       sizes="115px"
                       draggable={false}
-                      quality={100}
+                      quality={95}
                       priority={true}
-                      unoptimized={true}
+                      unoptimized={false}
                     />
                   </div>
                   {/* Magnifier y hover - Por encima de todo para mostrar imagen completa */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto" style={{ zIndex: 60 }}>
-                    <MagnifierImage src={neckImage} width={115} height={500} zoom={2} />
+                    <MagnifierImage key={neckImage} src={neckImage} width={115} height={500} zoom={2} />
                   </div>
                 </div>
 
@@ -798,16 +786,13 @@ export default function Crear() {
                     fill
                     className="object-contain"
                     sizes="220px"
-                    style={{ 
-                      objectPosition: 'bottom',
-                      imageRendering: 'crisp-edges'
-                    }}
-                    quality={100}
+                    style={{ objectPosition: 'bottom' }}
+                    quality={95}
                     priority={true}
-                    unoptimized={true}
+                    unoptimized={false}
                   />
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
-                    <MagnifierImage src={emitterImage} width={220} height={500} zoom={2} />
+                    <MagnifierImage key={emitterImage} src={emitterImage} width={220} height={500} zoom={2} />
                   </div>
                 </div>
               </div>
