@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import PartPanel from '@/components/PartPanel';
 import MagnifierImage from '@/components/MagnifierImage';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Crear() {
   const [pommelImage, setPommelImage] = useState('/images/pommel/standard.jpg');
@@ -13,6 +13,8 @@ export default function Crear() {
   const [emitterImage, setEmitterImage] = useState('/images/emitter/standard.jpg');
   const [openPanel, setOpenPanel] = useState<string | null>(null);
   const [currentNeckType, setCurrentNeckType] = useState<string>('standard');
+  const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const [pommelIcon, setPommelIcon] = useState('/images/previews/pommel/placeholder.jpg');
   const [bodyIcon, setBodyIcon] = useState('/images/previews/body/placeholder.jpg');
@@ -602,6 +604,98 @@ export default function Crear() {
     return `inset(${config.top} ${config.right} ${config.bottom} ${config.left})`;
   };
 
+  // Contenido de los modales
+  const modalContent = {
+    materiales: {
+      title: "Materiales de la Empuñadura",
+      description: `
+      <p>
+      <b>Metal:</b> Las piezas reales que conforman la empuñadura final diseñada en el “dibujo” de este simulador son fabricadas en aluminio mecanizado de alta calidad incluso (según pieza) con detalles en bronce macizo. Sus espesores de pared y diseño garantizan resistencia y durabilidad.
+      </p>
+      <br>
+      <p>
+      <b>Colores:</b> Para los acabados de color seleccionables no utilizamos pinturas tradicionales. Sometemos la pieza a un proceso de “powder coating” industrial lo que le da un recubrimiento “thermo poliester epoxi” de calidad ULTRA resistente a la manipulación.
+      </p>
+      <br>
+      <p>
+      <b>Recubrimientos:</b> Para los recubrimientos no utilizamos simils o sintéticos. Seleccionamos cortes premium de cuero real 100% vacuno de primera calidad lo cual reviste al lightsaber de una categoría inigualable. Utilizamos 2 tipos de cortes, “anchos” y “finos” de 3cm y 1.5cm aproximadamanete de ancho.
+      </p>`
+    },
+    incluye: {
+      title: "Qué Incluye",
+      description: `La empuñadura entregada comprenderá un LIGHTSABER FUNCIONAL COMPLETO con todas sus partes. Empuñadura con electrónica FULL SOUND de El taller de Han Zolo instalada / Hoja de policarbonato resistente a los golpes para duelo extremo /manual de instrucciones / cable cargador de batería. Las características de fabricación, resistencia, acabados etc serán los mismo que utilizamos para nuestra linea de sables premium nacionales de combate “COMBAT SABERS” disponibles en www.eltallerdehanzolo.com.ar  El lightsaber resultante es tanto apto para exhibición como para duelo y uso en combate extremo.
+      <br>
+      <br>
+      <b>ELECTRÓNICA FULL SOUND:</b>
+      <br>
+      <br>
+      <p>
+      - Iluminación RGB con todos los colores seleccionables por menú en el mismo lightsaber
+      <br>
+      - Carga de batería por USB
+      <br>
+      - Sonido premium de gran volumen y nitidez gracias a su parlante con capacidad para registros bajos.
+      <br>
+      - Smooth Swing: sensor de movimiento de alto realismo y precisión en la reacción del sonido al mover el lightsaber
+      <br>
+      - 16 bancos de audio diferentes que modifican los efectos de luz y sonido interactivos del sable dependiendo el personaje seleccionado.
+      </p>
+      `
+    },
+    instrucciones: {
+      title: "Instrucciones de Uso",
+      description: `La navegación del simulador es sumamente sencilla.<br>
+A la derecha de la pantalla un panel de 4 botones principales permite elegir entre las 4 partes que conformaran el lightsaber. A su vez cada pieza seleccionada permitirá la elección de acabados de color y accesorios si estuvieran disponibles.
+<b>Piezas:</b>
+<br>
+<b>Piezas E:</b> Pico frontal
+<br>
+<b>Piezas N:</b> Cuello
+<br>
+<b>Piezas B:</b> Cuerpo de agarre principal
+<br>
+<b>Piezas P:</b> Remate trasero
+<br>
+<p>A la izquierda de la botonera principal una ventana de pre-visualizacion irá mostrando un esquema ilustrativo de como toma forma el diseño conforme se van eligiendo las partes y los acabados de terminación.
+También brindará una foto de la pieza REAL (sin acabados aplicados) a manera de referencia como complemento al dibujo ilustrativo para que el usuario tenga mayor información visual acerca de como es la pieza seleccionada.
+<br>
+Una vez completado el proceso de selección de componentes el botón “FINALIZAR” dará lugar al ultimo paso que será solicitar la fabricación al Taller de Han Zolo de tu diseño
+<br>
+<b>BOTONES ADICIONALES:</b>
+<br>
+- <b>ZOOM:</b> permite ver mas en detalle los acabados seleccionados (como por ejemplo los recubrimientos de cuero o las pinturas con alguna textura)
+- <b>CAPTURA DE IMAGEN:</b> Esta función te permite “sacarle una foto” a tu diseño, que será guardada directamente en la carpeta de DESCARGAS de tu dispositivo.
+`
+    },
+    pedidos: {
+      title: "World Wide Orders",
+      description: `Empty hilts are available for International orders - WE SHIPP WORLD WIDE 
+Feel free to use this lightsaber workbench simulator to design your hilt and contact us personally on the link provided for details on payment and shipping. 
+<br>
+<br>
+Direct contact: <a href="https://ig.me/m/el_taller_de_han_zolo" target="_blank" rel="noopener noreferrer">https://ig.me/m/el_taller_de_han_zolo</a>
+<br>
+<br>
+We shipp worldwide and all the resulting hilts are TXQ/LGT/NEXUS cores compatible for customization convenience.`
+    },
+    galeria: {
+      title: "Galería de Fotos",
+      description: ""
+    }
+  };
+
+  // Función para cerrar modal
+  const closeModal = () => {
+    setActiveModal(null);
+    setSelectedImage(null);
+  };
+
+  // Función para abrir imagen en lightbox
+  const openImageLightbox = (imageSrc: string) => {
+    console.log('Abriendo lightbox con imagen:', imageSrc);
+    setSelectedImage(imageSrc);
+  };
+
   return (
     <main className="min-h-screen bg-black text-white px-3 py-3 overflow-x-auto">
       <motion.header
@@ -619,51 +713,51 @@ export default function Crear() {
 
     {/* Navegación centrada */}
     <nav className="flex gap-6 items-center mx-auto">
-      <a
-        href="#inicio"
+      <button
+        onClick={() => setActiveModal('materiales')}
         className="relative text-white text-lg font-medium transition hover:text-orange-400
           after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-[2px]
           after:bg-orange-400 after:opacity-0 hover:after:opacity-100
           hover:after:shadow-[0_0_6px_2px_rgba(255,115,0,0.7)] after:transition-all"
       >
         Materiales de la Empuñadura
-      </a>
-      <a
-        href="#pommel"
+      </button>
+      <button
+        onClick={() => setActiveModal('incluye')}
         className="relative text-white text-lg font-medium transition hover:text-orange-400
           after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-[2px]
           after:bg-orange-400 after:opacity-0 hover:after:opacity-100
           hover:after:shadow-[0_0_6px_2px_rgba(255,115,0,0.7)] after:transition-all"
       >
         Que incluye
-      </a>
-      <a
-        href="#body"
+      </button>
+      <button
+        onClick={() => setActiveModal('instrucciones')}
         className="relative text-white text-lg font-medium transition hover:text-orange-400
           after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-[2px]
           after:bg-orange-400 after:opacity-0 hover:after:opacity-100
           hover:after:shadow-[0_0_6px_2px_rgba(255,115,0,0.7)] after:transition-all"
       >
         Instrucciones de Uso
-      </a>
-      <a
-        href="#neck"
+      </button>
+      <button
+        onClick={() => setActiveModal('pedidos')}
         className="relative text-white text-lg font-medium transition hover:text-orange-400
           after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-[2px]
           after:bg-orange-400 after:opacity-0 hover:after:opacity-100
           hover:after:shadow-[0_0_6px_2px_rgba(255,115,0,0.7)] after:transition-all"
       >
         World Wide Orders
-      </a>
-      <a
-        href="#emitter"
+      </button>
+      <button
+        onClick={() => setActiveModal('galeria')}
         className="relative text-white text-lg font-medium transition hover:text-orange-400
           after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-full after:h-[2px]
           after:bg-orange-400 after:opacity-0 hover:after:opacity-100
           hover:after:shadow-[0_0_6px_2px_rgba(255,115,0,0.7)] after:transition-all"
       >
         Galeria de Fotos
-      </a>
+      </button>
     </nav>
   </div>
 </motion.header>
@@ -868,6 +962,232 @@ export default function Crear() {
           />
         </aside>
       </div>
+      
+      {/* Lightbox para imagen ampliada */}
+      {selectedImage && (
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: 'rgba(0, 0, 0, 0.9)',
+              zIndex: 110,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '20px'
+            }}
+            onClick={() => setSelectedImage(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              style={{
+                position: 'relative',
+                maxWidth: '90vw',
+                maxHeight: '90vh',
+                borderRadius: '12px',
+                overflow: 'hidden',
+                border: '3px solid #FF6F00',
+                boxShadow: '0 0 30px rgba(255, 111, 0, 0.5)'
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={selectedImage}
+                alt="Lightsaber ampliado"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  maxWidth: '80vw',
+                  maxHeight: '80vh'
+                }}
+              />
+              <button
+                onClick={() => setSelectedImage(null)}
+                style={{
+                  position: 'absolute',
+                  top: '10px',
+                  right: '10px',
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  backgroundColor: 'rgba(255, 111, 0, 0.8)',
+                  border: 'none',
+                  color: 'white',
+                  fontSize: '24px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 111, 0, 1)';
+                  e.currentTarget.style.transform = 'scale(1.1)';
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgba(255, 111, 0, 0.8)';
+                  e.currentTarget.style.transform = 'scale(1)';
+                }}
+              >
+                ×
+              </button>
+            </motion.div>
+          </motion.div>
+        </AnimatePresence>
+      )}
+      
+      {/* Modal System */}
+      <AnimatePresence>
+        {activeModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-[100]"
+            onClick={closeModal}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, y: 50 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: 50 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              className={`bg-black border-2 border-orange-400 rounded-lg p-8 w-full mx-4 relative ${
+                activeModal === 'galeria' ? 'max-w-6xl max-h-[80vh] overflow-y-auto' : 'max-w-2xl'
+              }`}
+              style={{
+                boxShadow: '0 0 20px rgba(255, 111, 0, 0.5), inset 0 0 20px rgba(255, 111, 0, 0.1)',
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Botón de cerrar */}
+              <button
+                onClick={closeModal}
+                className="absolute top-4 right-4 text-orange-400 hover:text-orange-300 transition-colors text-2xl font-bold"
+                style={{
+                  textShadow: '0 0 10px rgba(255, 111, 0, 0.8)',
+                }}
+              >
+                ×
+              </button>
+              
+              {/* Contenido del modal */}
+              <div className="text-white">
+                <h2 
+                  className="text-3xl font-bold mb-6 text-orange-400"
+                  style={{
+                    fontFamily: "'Orbitron', sans-serif",
+                    textShadow: '0 0 10px #FF6F00, 0 0 20px #FF6F00',
+                  }}
+                >
+                  {modalContent[activeModal as keyof typeof modalContent]?.title}
+                </h2>
+                {activeModal === 'galeria' ? (
+                  <div className="gallery-container">
+                    <p style={{ marginBottom: '20px', color: '#ccc' }}>
+                      Explora nuestra colección de lightsabers únicos y diseños personalizados creados por nuestros clientes.
+                    </p>
+                    <div 
+                      className="gallery-grid" 
+                      style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                        gap: '15px',
+                        marginTop: '20px'
+                      }}
+                    >
+                      {[
+                        { src: '/images/galeria/saber1.jpg', title: 'Saber Clásico' },
+                        { src: '/images/galeria/saber6.jpg', title: 'Diseño Premium' },
+                        { src: '/images/galeria/saber3.jpg', title: 'Edición Especial' },
+                        { src: '/images/galeria/saber5.jpg', title: 'Combate Extremo' },
+                        { src: '/images/galeria/saber2.jpg', title: 'Cuero Premium' },
+                        { src: '/images/galeria/saber4.jpg', title: 'Personalizado' }
+                      ].map((item, index) => (
+                        <div
+                          key={index}
+                          className="gallery-item"
+                          style={{
+                            position: 'relative',
+                            cursor: 'pointer',
+                            borderRadius: '8px',
+                            overflow: 'hidden',
+                            aspectRatio: '1',
+                            border: '2px solid transparent',
+                            transition: 'all 0.3s ease'
+                          }}
+                          onMouseOver={(e) => {
+                            e.currentTarget.style.borderColor = '#FF6F00';
+                            e.currentTarget.style.transform = 'scale(1.05)';
+                          }}
+                          onMouseOut={(e) => {
+                            e.currentTarget.style.borderColor = 'transparent';
+                            e.currentTarget.style.transform = 'scale(1)';
+                          }}
+                          onClick={() => openImageLightbox(item.src)}
+                        >
+                          <img
+                            src={item.src}
+                            alt={item.title}
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                              borderRadius: '6px'
+                            }}
+                            onError={(e) => {
+                              e.currentTarget.src = '/images/icons/logo.JPG';
+                            }}
+                          />
+                          <div
+                            style={{
+                              position: 'absolute',
+                              bottom: 0,
+                              left: 0,
+                              right: 0,
+                              background: 'linear-gradient(transparent, rgba(0,0,0,0.8))',
+                              padding: '10px',
+                              color: 'white',
+                              fontSize: '12px'
+                            }}
+                          >
+                            <b style={{ color: '#FF6F00' }}>{item.title}</b>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <p style={{ marginTop: '20px', fontSize: '14px', color: '#999', textAlign: 'center' }}>
+                      <i>Haz clic en cualquier imagen para verla en detalle</i>
+                    </p>
+                  </div>
+                ) : (
+                  <div 
+                    className="text-lg leading-relaxed text-gray-200"
+                    style={{
+                      lineHeight: '1.8',
+                    }}
+                    dangerouslySetInnerHTML={{
+                      __html: modalContent[activeModal as keyof typeof modalContent]?.description || ''
+                    }}
+                  />
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </main>
   );
 }
