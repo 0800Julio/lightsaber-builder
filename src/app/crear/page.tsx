@@ -712,6 +712,144 @@ We shipp worldwide and all the resulting hilts are TXQ/LGT/NEXUS cores compatibl
     setSelectedImage(imageSrc);
   };
 
+  // Función para capturar el lightsaber completo (versión simplificada)
+  const captureLightsaber = async () => {
+    try {
+      console.log('Iniciando captura simplificada...');
+      
+      // Crear un canvas para dibujar las partes manualmente
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      
+      if (!ctx) {
+        throw new Error('No se pudo crear el contexto del canvas');
+      }
+      
+      // Configurar el tamaño del canvas
+      canvas.width = 800;
+      canvas.height = 400;
+      
+      // Fondo blanco
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Función helper para cargar imágenes
+      const loadImage = (src: string): Promise<HTMLImageElement> => {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.crossOrigin = 'anonymous';
+          img.onload = () => resolve(img);
+          img.onerror = reject;
+          img.src = src;
+        });
+      };
+      
+      let xPosition = 50;
+      const yPosition = 50;
+      const partHeight = 300;
+      
+      // Cargar y dibujar cada parte del lightsaber
+      try {
+        // Pommel
+        if (pommelImage !== '/images/pommel/standard.jpg') {
+          const pommelImg = await loadImage(pommelImage);
+          const aspectRatio = pommelImg.width / pommelImg.height;
+          const partWidth = partHeight * aspectRatio;
+          ctx.drawImage(pommelImg, xPosition, yPosition, partWidth, partHeight);
+          xPosition += partWidth - 10;
+        }
+        
+        // Body
+        if (bodyImage !== '/images/body/standard.jpg') {
+          const bodyImg = await loadImage(bodyImage);
+          const aspectRatio = bodyImg.width / bodyImg.height;
+          const partWidth = partHeight * aspectRatio;
+          ctx.drawImage(bodyImg, xPosition, yPosition, partWidth, partHeight);
+          xPosition += partWidth - 10;
+        }
+        
+        // Neck
+        if (neckImage !== '/images/neck/standard.jpg') {
+          const neckImg = await loadImage(neckImage);
+          const aspectRatio = neckImg.width / neckImg.height;
+          const partWidth = partHeight * aspectRatio;
+          ctx.drawImage(neckImg, xPosition, yPosition, partWidth, partHeight);
+          xPosition += partWidth - 10;
+        }
+        
+        // Emitter
+        if (emitterImage !== '/images/emitter/standard.jpg') {
+          const emitterImg = await loadImage(emitterImage);
+          const aspectRatio = emitterImg.width / emitterImg.height;
+          const partWidth = partHeight * aspectRatio;
+          ctx.drawImage(emitterImg, xPosition, yPosition, partWidth, partHeight);
+        }
+        
+      } catch (imgError) {
+        console.warn('Error cargando algunas imágenes:', imgError);
+        // Continuar con las partes que sí se pudieron cargar
+      }
+      
+      return canvas.toDataURL('image/png', 1.0);
+      
+    } catch (error) {
+      console.error('Error capturando imagen:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
+      alert('Error al capturar la imagen: ' + errorMessage);
+      return null;
+    }
+  };
+
+  // Función para descargar la imagen
+  const downloadLightsaber = async () => {
+    console.log('Iniciando descarga...');
+    const imageData = await captureLightsaber();
+    
+    if (!imageData) {
+      console.log('No se pudo capturar la imagen');
+      return;
+    }
+
+    try {
+      const link = document.createElement('a');
+      link.download = `lightsaber-personalizado-${Date.now()}.png`;
+      link.href = imageData;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      console.log('Descarga completada');
+    } catch (error) {
+      console.error('Error en la descarga:', error);
+      alert('Error al descargar la imagen');
+    }
+  };
+
+  // Función para finalizar y enviar por Instagram
+  const finalizarPedido = async () => {
+    console.log('Iniciando finalización...');
+    
+    try {
+      // Primero descargar la imagen
+      await downloadLightsaber();
+      
+      // Esperar un momento para que la descarga se complete
+      setTimeout(() => {
+        const message = encodeURIComponent('¡Hola! Quiero fabricar este lightsaber personalizado que diseñé en el simulador. Te envío la imagen del diseño.');
+        const instagramUrl = `https://ig.me/m/el_taller_de_han_zolo`;
+        
+        // Abrir Instagram en una nueva pestaña
+        window.open(instagramUrl, '_blank');
+        
+        // Mostrar instrucciones al usuario
+        alert('✅ Se ha descargado tu diseño.\n\n📱 Se abrirá Instagram Direct donde podrás:\n1. Adjuntar la imagen descargada\n2. Enviar tu consulta\n\n¡Nos pondremos en contacto contigo pronto!');
+      }, 1000);
+      
+    } catch (error) {
+      console.error('Error en finalización:', error);
+      alert('Hubo un error. Por favor intenta de nuevo.');
+    }
+  };
+
   return (
     <main className="min-h-screen bg-black text-white px-3 py-3 overflow-x-auto">
       <motion.header
@@ -1052,6 +1190,44 @@ We shipp worldwide and all the resulting hilts are TXQ/LGT/NEXUS cores compatibl
             }
             iconPath={emitterIcon}
           />
+          
+          {/* Botones de acción */}
+          <div className="mt-6 space-y-3">
+            {/* Botón Capturar Imagen */}
+            <button
+              onClick={downloadLightsaber}
+              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 
+                         text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 
+                         transform hover:scale-105 hover:shadow-lg flex items-center justify-center gap-2
+                         border-2 border-blue-500 hover:border-blue-400"
+              style={{
+                boxShadow: '0 4px 15px rgba(59, 130, 246, 0.3)'
+              }}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 15.5A3.5 3.5 0 0 1 8.5 12A3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5a3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97c0-.33-.03-.65-.07-.97l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.31-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65A.506.506 0 0 0 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.22-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.32-.07.65-.07.97c0 .33.03.65.07.97L2.46 14.6c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.31.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.22.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.63Z"/>
+              </svg>
+              CAPTURAR IMAGEN
+            </button>
+
+            {/* Botón Finalizar */}
+            <button
+              onClick={finalizarPedido}
+              className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 
+                         text-white font-bold py-4 px-4 rounded-lg transition-all duration-300 
+                         transform hover:scale-105 hover:shadow-xl flex items-center justify-center gap-2
+                         border-2 border-orange-400 hover:border-orange-300"
+              style={{
+                boxShadow: '0 6px 20px rgba(255, 111, 0, 0.4)',
+                textShadow: '0 1px 2px rgba(0,0,0,0.3)'
+              }}
+            >
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 1H5C3.89 1 3 1.89 3 3V19C3 20.1 3.9 21 5 21H11V19H5V3H13V9H21ZM14 4L19 9H14V4ZM15 13V19H17V16H19.5C20.3 16 21 15.3 21 14.5S20.3 13 19.5 13H15ZM17 15V14H19V15H17Z"/>
+              </svg>
+              FINALIZAR PEDIDO
+            </button>
+          </div>
         </aside>
       </div>
       
