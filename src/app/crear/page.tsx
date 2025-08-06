@@ -21,6 +21,22 @@ export default function Crear() {
   const [neckIcon, setNeckIcon] = useState('/images/previews/neck/placeholder.jpg');
   const [emitterIcon, setEmitterIcon] = useState('/images/previews/emitter/placeholder.jpg');
 
+  // Estados para controlar la lupa de cada pieza
+  const [magnifierActive, setMagnifierActive] = useState({
+    pommel: false,
+    body: false,
+    neck: false,
+    emitter: false
+  });
+
+  // Función para toggle de la lupa
+  const toggleMagnifier = (part: 'pommel' | 'body' | 'neck' | 'emitter') => {
+    setMagnifierActive(prev => ({
+      ...prev,
+      [part]: !prev[part]
+    }));
+  };
+
   // Configuración de márgenes específicos para cada pieza N
   const neckMarginConfig: Record<string, { marginLeft: string; marginRight: string }> = {
     'standard': { marginLeft: '-10px', marginRight: '-16px' },
@@ -796,9 +812,27 @@ We shipp worldwide and all the resulting hilts are TXQ/LGT/NEXUS cores compatibl
                     priority={true}
                     unoptimized={false}
                   />
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
-                    <MagnifierImage key={pommelImage} src={pommelImage} width={130} height={500} zoom={2} />
-                  </div>
+                  {magnifierActive.pommel && (
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:pointer-events-auto">
+                      <MagnifierImage key={pommelImage} src={pommelImage} width={130} height={500} zoom={2} />
+                    </div>
+                  )}
+                  {/* Botón de lupa */}
+                  <button
+                    onClick={() => toggleMagnifier('pommel')}
+                    className={`absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 p-2 rounded-full transition-all duration-300 border-2 z-50 ${
+                      magnifierActive.pommel 
+                        ? 'bg-orange-500 border-orange-500 text-white shadow-lg scale-105' 
+                        : 'bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600 hover:border-gray-500'
+                    }`}
+                    style={{
+                      boxShadow: magnifierActive.pommel ? '0 0 15px rgba(255, 111, 0, 0.5)' : 'none'
+                    }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                    </svg>
+                  </button>
                 </div>
 
                 {/* Body */}
@@ -814,9 +848,27 @@ We shipp worldwide and all the resulting hilts are TXQ/LGT/NEXUS cores compatibl
                     priority={true}
                     unoptimized={false}
                   />
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-40 pointer-events-none group-hover:pointer-events-auto">
-                    <MagnifierImage key={bodyImage} src={bodyImage} width={340} height={500} zoom={2} />
-                  </div>
+                  {magnifierActive.body && (
+                    <div className="absolute inset-0 flex items-center justify-center z-40 pointer-events-none group-hover:pointer-events-auto">
+                      <MagnifierImage key={bodyImage} src={bodyImage} width={340} height={500} zoom={2} />
+                    </div>
+                  )}
+                  {/* Botón de lupa */}
+                  <button
+                    onClick={() => toggleMagnifier('body')}
+                    className={`absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 p-2 rounded-full transition-all duration-300 border-2 z-50 ${
+                      magnifierActive.body 
+                        ? 'bg-orange-500 border-orange-500 text-white shadow-lg scale-105' 
+                        : 'bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600 hover:border-gray-500'
+                    }`}
+                    style={{
+                      boxShadow: magnifierActive.body ? '0 0 15px rgba(255, 111, 0, 0.5)' : 'none'
+                    }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                    </svg>
+                  </button>
                 </div>
 
                 {/* Neck (pieza N) - Restaurando comportamiento original */}
@@ -866,10 +918,28 @@ We shipp worldwide and all the resulting hilts are TXQ/LGT/NEXUS cores compatibl
                       unoptimized={false}
                     />
                   </div>
-                  {/* Magnifier y hover - Por encima de todo para mostrar imagen completa */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto" style={{ zIndex: 60 }}>
-                    <MagnifierImage key={neckImage} src={neckImage} width={115} height={500} zoom={2} />
-                  </div>
+                  {/* Magnifier - Por encima de todo para mostrar imagen completa */}
+                  {magnifierActive.neck && (
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:pointer-events-auto" style={{ zIndex: 60 }}>
+                      <MagnifierImage key={neckImage} src={neckImage} width={115} height={500} zoom={2} />
+                    </div>
+                  )}
+                  {/* Botón de lupa */}
+                  <button
+                    onClick={() => toggleMagnifier('neck')}
+                    className={`absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 p-2 rounded-full transition-all duration-300 border-2 z-[70] ${
+                      magnifierActive.neck 
+                        ? 'bg-orange-500 border-orange-500 text-white shadow-lg scale-105' 
+                        : 'bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600 hover:border-gray-500'
+                    }`}
+                    style={{
+                      boxShadow: magnifierActive.neck ? '0 0 15px rgba(255, 111, 0, 0.5)' : 'none'
+                    }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                    </svg>
+                  </button>
                 </div>
 
                 {/* Emitter */}
@@ -885,9 +955,27 @@ We shipp worldwide and all the resulting hilts are TXQ/LGT/NEXUS cores compatibl
                     priority={true}
                     unoptimized={false}
                   />
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">
-                    <MagnifierImage key={emitterImage} src={emitterImage} width={220} height={500} zoom={2} />
-                  </div>
+                  {magnifierActive.emitter && (
+                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none group-hover:pointer-events-auto">
+                      <MagnifierImage key={emitterImage} src={emitterImage} width={220} height={500} zoom={2} />
+                    </div>
+                  )}
+                  {/* Botón de lupa */}
+                  <button
+                    onClick={() => toggleMagnifier('emitter')}
+                    className={`absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 p-2 rounded-full transition-all duration-300 border-2 z-50 ${
+                      magnifierActive.emitter 
+                        ? 'bg-orange-500 border-orange-500 text-white shadow-lg scale-105' 
+                        : 'bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600 hover:border-gray-500'
+                    }`}
+                    style={{
+                      boxShadow: magnifierActive.emitter ? '0 0 15px rgba(255, 111, 0, 0.5)' : 'none'
+                    }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                    </svg>
+                  </button>
                 </div>
               </div>
             </div>
