@@ -894,7 +894,11 @@ We shipp worldwide and all the resulting hilts are TXQ/LGT/NEXUS cores compatibl
           </div>
         </div>
 
-        <aside className="w-full lg:w-[280px] lg:flex-shrink-0 bg-gray-900 p-3 rounded-xl shadow-md border border-gray-600 space-y-3" style={{ maxHeight: '550px', overflowY: 'auto' }}>
+        <aside className="w-full xl:w-[350px] bg-[#1a1a1a] rounded-xl p-3 max-h-[550px] overflow-y-auto shadow-lg"
+               style={{ 
+                 boxShadow: '0 4px 6px rgba(0,0,0,0.3)',
+                 border: 'none'
+               }}>
           <PartPanel
             label="PUNTA TRASERA"
             short="P"
