@@ -736,7 +736,7 @@ We shipp worldwide and all the resulting hilts are TXQ/LGT/NEXUS cores compatibl
       // Función helper para cargar imágenes
       const loadImage = (src: string): Promise<HTMLImageElement> => {
         return new Promise((resolve, reject) => {
-          const img = new Image();
+          const img = document.createElement('img') as HTMLImageElement;
           img.crossOrigin = 'anonymous';
           img.onload = () => resolve(img);
           img.onerror = reject;
@@ -834,7 +834,6 @@ We shipp worldwide and all the resulting hilts are TXQ/LGT/NEXUS cores compatibl
       
       // Esperar un momento para que la descarga se complete
       setTimeout(() => {
-        const message = encodeURIComponent('¡Hola! Quiero fabricar este lightsaber personalizado que diseñé en el simulador. Te envío la imagen del diseño.');
         const instagramUrl = `https://ig.me/m/el_taller_de_han_zolo`;
         
         // Abrir Instagram en una nueva pestaña
