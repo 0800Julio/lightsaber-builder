@@ -48,8 +48,188 @@ body {
     /* Eliminar cualquier espacio entre las piezas */
     margin: 0;
     padding: 0;
-    border: none;
-    outline: none;
+}
+
+/* Estilos del HTML original para los paneles */
+.part-panel {
+    border: 1px solid #444;
+    border-radius: 12px;
+    padding: 8px;
+    margin-bottom: 12px;
+    background: #2a2a2a;
+}
+
+.part-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: background 0.3s;
+}
+
+.part-header:hover {
+    background: #333;
+}
+
+.part-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 4px;
+    border: 1px solid #555;
+}
+
+.part-info {
+    flex: 1;
+}
+
+.part-label {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.part-chevron {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s;
+}
+
+.part-chevron.open {
+    transform: rotate(180deg);
+}
+
+.part-options {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.part-options.open {
+    max-height: 750px;
+    padding-top: 12px;
+}
+
+.option-group {
+    margin-bottom: 12px;
+}
+
+.option-label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #ccc;
+}
+
+.option-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 8px;
+}
+
+.color-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(35px, 1fr));
+    gap: 6px;
+}
+
+.option-button {
+    padding: 8px 12px;
+    border: 1px solid #555;
+    border-radius: 6px;
+    background: #333;
+    color: white;
+    cursor: pointer;
+    text-align: center;
+    font-size: 12px;
+    transition: all 0.3s;
+}
+
+.option-button:hover {
+    background: #444;
+    border-color: #FF6F00;
+}
+
+.option-button.selected {
+    background: #FF6F00;
+    border-color: #FF6F00;
+    color: white;
+}
+
+.color-button {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 2px solid #555;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 10px;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    position: relative;
+    overflow: hidden;
+}
+
+.color-button:hover {
+    border-color: #FF6F00;
+    transform: scale(1.15);
+    box-shadow: 0 0 10px rgba(255, 111, 0, 0.5);
+}
+
+.color-button.selected {
+    border-color: #FF6F00;
+    box-shadow: 0 0 15px rgba(255, 111, 0, 0.8);
+    transform: scale(1.1);
+    border-width: 3px;
+}
+
+.color-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%);
+    pointer-events: none;
+    border-radius: 50%;
+}
+
+.part-preview {
+    margin-bottom: 16px;
+    padding: 12px;
+    background: #333;
+    border-radius: 8px;
+    border: 1px solid #555;
+}
+
+.preview-label {
+    font-size: 12px;
+    color: #ccc;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.preview-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 120px;
+    background: #222;
+    border-radius: 6px;
+    border: 1px solid #444;
+}
+
+.preview-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 4px;
 }
 
 .lightsaber-part img {
